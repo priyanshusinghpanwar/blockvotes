@@ -1,5 +1,6 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 import type { NextFunction, Request, Response } from "express";
+import { buildSessionCookieOptions } from "./session-cookie";
 
 const VOTER_SESSION_COOKIE = "blockvotes_voter_session";
 const VOTER_SESSION_TTL_MS = 12 * 60 * 60 * 1000;
@@ -76,11 +77,7 @@ function parseSessionToken(token: string | undefined): VoterSessionPayload | nul
 }
 
 function clearVoterSessionCookie(res: Response): void {
-  res.clearCookie(VOTER_SESSION_COOKIE, {
-    httpOnly: true,
-    sameSite: "strict",
-    path: "/",
-  });
+  res.clearCookie(VOTER_SESSION_COOKIE, buildSessionCookieOptions("strict"));
 }
 
 export function attachVoterSessionCookie(
@@ -93,13 +90,11 @@ export function attachVoterSessionCookie(
     exp: Date.now() + VOTER_SESSION_TTL_MS,
   });
 
-  res.cookie(VOTER_SESSION_COOKIE, token, {
-    httpOnly: true,
-    sameSite: "strict",
-    secure: process.env.NODE_ENV === "production",
-    maxAge: VOTER_SESSION_TTL_MS,
-    path: "/",
-  });
+  res.cookie(
+    VOTER_SESSION_COOKIE,
+    token,
+    buildSessionCookieOptions("strict", VOTER_SESSION_TTL_MS),
+  );
 }
 
 export function logoutVoterSession(_req: Request, res: Response): void {

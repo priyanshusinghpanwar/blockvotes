@@ -44,7 +44,7 @@ Then redeploy the Render API.
 
 ## 5. Quick Checks
 
-- API health: `https://blockvotes-api.onrender.com/api/health`
+- API health: `https://blockvotes-api.onrender.com/api/healthz`
 - Frontend: `https://your-site.vercel.app`
 
 Render free Postgres databases are for demos and expire after 30 days, so do not use the free database for real election data.

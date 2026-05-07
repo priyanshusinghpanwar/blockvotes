@@ -2,6 +2,7 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 import { db, companiesTable, electionsTable, candidatesTable, votersTable } from "@workspace/db";
 import { and, eq } from "drizzle-orm";
 import type { NextFunction, Request, Response } from "express";
+import { buildSessionCookieOptions } from "./session-cookie";
 
 const ADMIN_SESSION_COOKIE = "blockvotes_admin_session";
 const ADMIN_SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000;
@@ -80,11 +81,7 @@ function parseSessionToken(token: string | undefined): AdminSessionPayload | nul
 }
 
 function clearSessionCookie(res: Response): void {
-  res.clearCookie(ADMIN_SESSION_COOKIE, {
-    httpOnly: true,
-    sameSite: "lax",
-    path: "/",
-  });
+  res.clearCookie(ADMIN_SESSION_COOKIE, buildSessionCookieOptions("lax"));
 }
 
 export function attachAdminSessionCookie(
@@ -97,13 +94,11 @@ export function attachAdminSessionCookie(
     exp: Date.now() + ADMIN_SESSION_TTL_MS,
   });
 
-  res.cookie(ADMIN_SESSION_COOKIE, token, {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    maxAge: ADMIN_SESSION_TTL_MS,
-    path: "/",
-  });
+  res.cookie(
+    ADMIN_SESSION_COOKIE,
+    token,
+    buildSessionCookieOptions("lax", ADMIN_SESSION_TTL_MS),
+  );
 }
 
 export function logoutAdminSession(_req: Request, res: Response): void {
