@@ -1,0 +1,15 @@
+{
+  "name": "@workspace/blockchain",
+  "version": "0.0.0",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "compile": "hardhat compile",
+    "deploy:ganache": "hardhat run scripts/deploy.js --network ganache"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ethers": "^3.1.0",
+    "ethers": "^6.15.0",
+    "hardhat": "^2.27.0"
+  }
+}

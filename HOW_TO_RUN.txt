@@ -1,0 +1,182 @@
+====================================================
+  BLOCKVOTES - HOW TO RUN LOCALLY
+====================================================
+
+REQUIREMENTS
+------------
+- Node.js v24 (via nvm)
+- pnpm (installed globally via npm)
+- PostgreSQL 17
+
+DATABASE CREDENTIALS
+--------------------
+  Host:     localhost
+  Port:     5432
+  Database: blockvotes
+  User:     postgres
+  Password: use your local PostgreSQL password in artifacts\api-server\.env.local
+
+
+====================================================
+  STEP 0 — Set up Brevo email (first time only)
+====================================================
+
+Brevo is used to send OTP emails to voters and confirmation
+emails to candidates. Free tier allows 300 emails/day.
+
+  1. Go to https://brevo.com and create a free account
+
+  2. After signing in, go to:
+     Profile (top right) → SMTP & API → SMTP tab
+     Copy your SMTP login and password
+
+  3. Go to https://app.brevo.com/senders
+     Add your Gmail as a sender and verify it
+
+  4. Open: artifacts\api-server\.env
+     Update these lines:
+       BREVO_SMTP_LOGIN=your-smtp-login
+       BREVO_SMTP_PASS=your-smtp-password
+       BREVO_SENDER=your-verified-email@gmail.com
+
+
+====================================================
+  STEP 1 — Install dependencies (first time only)
+====================================================
+
+Open a terminal in E:\Project\Block-Chain\Block-Chain and run:
+
+  $env:PATH = "C:\Users\Priyanshu Singh\AppData\Local\nvm\v24.14.1;C:\Users\Priyanshu Singh\AppData\Roaming\npm;" + $env:PATH; pnpm install
+
+
+====================================================
+  STEP 2 — Push database schema (first time only)
+====================================================
+
+  $env:PATH = "C:\Users\Priyanshu Singh\AppData\Local\nvm\v24.14.1;C:\Users\Priyanshu Singh\AppData\Roaming\npm;" + $env:PATH
+  pnpm --filter @workspace/db exec drizzle-kit push
+
+  Notes:
+  - DATABASE_URL is auto-detected from artifacts\api-server\.env and artifacts\api-server\.env.local
+  - Keep real local credentials in artifacts\api-server\.env.local so they are not committed
+  - Only export DATABASE_URL manually when you want to target a different database
+
+
+====================================================
+  STEP 3 — Build the API server (first time + after changes)
+====================================================
+
+Open a terminal and run:
+
+  $env:PATH = "C:\Users\Priyanshu Singh\AppData\Local\nvm\v24.14.1;C:\Users\Priyanshu Singh\AppData\Roaming\npm;" + $env:PATH; cd E:\Project\Block-Chain\Block-Chain\artifacts\api-server; pnpm run build
+
+
+====================================================
+  STEP 4 — Start the API server (Terminal 1)
+====================================================
+
+  $env:PATH = "C:\Users\Priyanshu Singh\AppData\Local\nvm\v24.14.1;C:\Users\Priyanshu Singh\AppData\Roaming\npm;" + $env:PATH; cd E:\Project\Block-Chain\Block-Chain\artifacts\api-server; pnpm run start
+
+  You should see: {"level":"info","port":3000,"msg":"Server listening"}
+
+
+====================================================
+  STEP 5 — Start the frontend (Terminal 2)
+====================================================
+
+  $env:PATH = "C:\Users\Priyanshu Singh\AppData\Local\nvm\v24.14.1;C:\Users\Priyanshu Singh\AppData\Roaming\npm;" + $env:PATH; cd E:\Project\Block-Chain\Block-Chain\artifacts\blockvotes; pnpm dev
+
+  You should see: VITE ready  Local: http://localhost:5173/
+
+
+====================================================
+  STEP 6 — Open in browser
+====================================================
+
+  http://localhost:5173
+
+
+====================================================
+  NOTES
+====================================================
+
+- Keep both terminals running at the same time
+- API runs on port 3000, frontend on port 5173
+- The frontend proxies /api calls to the API server automatically
+- If port 3000 is already in use, the previous server is still
+  running — no need to restart it
+- You only need to re-run Steps 4 and 5 after restarting your PC
+- You only need to re-run Step 3 (build) if you change API server code
+- pnpm is located at:
+    C:\Users\Priyanshu Singh\AppData\Roaming\npm\pnpm.cmd
+  node is located at:
+    C:\Users\Priyanshu Singh\AppData\Local\nvm\v24.14.1\node.exe
+  The $env:PATH line at the start of each command makes them available
+
+
+====================================================
+  OPTIONAL - SMS OTP VIA YOUR OWN ANDROID PHONE (SIM BILLING)
+====================================================
+
+To send OTP SMS from your own phone number/SIM (instead of Twilio),
+configure an Android SMS gateway app and set these in:
+  artifacts\api-server\.env
+
+  SMS_PROVIDER=android_gateway
+  SMS_GATEWAY_URL=http://<your-phone-or-gateway-host>/send
+  SMS_GATEWAY_METHOD=POST
+  SMS_GATEWAY_TO_FIELD=to
+  SMS_GATEWAY_MESSAGE_FIELD=message
+  SMS_GATEWAY_AUTH_TOKEN=<optional-token>
+  SMS_GATEWAY_AUTH_HEADER=Authorization
+  SMS_GATEWAY_AUTH_SCHEME=Bearer
+  SMS_GATEWAY_TOKEN_FIELD=
+
+Notes:
+- If your gateway requires GET, set SMS_GATEWAY_METHOD=GET
+- If gateway expects token in query/body, set SMS_GATEWAY_TOKEN_FIELD=token
+- Keep Android phone online, app running, and SIM active
+- OTP login requires BOTH email and SMS delivery
+
+For SmsMobileApi app (blue frontend), use:
+  SMS_PROVIDER=smsmobileapi
+  SMSMOBILEAPI_APIKEY=<api-key-from-mobile-app-settings/help>
+  SMSMOBILEAPI_ENDPOINT=https://api.smsmobileapi.com/sendsms/
+  SMSMOBILEAPI_PORT=
+  SMSMOBILEAPI_SIDENTIFIANT=
+
+
+====================================================
+  OPTIONAL - BLOCKCHAIN DEMO (GANACHE + METAMASK)
+====================================================
+
+1) Start Ganache on:
+   http://127.0.0.1:7545
+
+2) Set env vars in terminal:
+
+  $env:BLOCKCHAIN_PRIVATE_KEY = "0x<ganache-private-key>"
+  $env:GANACHE_RPC_URL = "http://127.0.0.1:7545"
+  $env:BLOCKCHAIN_CHAIN_ID = "1337"
+
+3) Compile and deploy the contract:
+
+  cd E:\Project\Block-Chain\Block-Chain
+  pnpm --filter @workspace/blockchain run compile
+  pnpm --filter @workspace/blockchain run deploy:ganache
+
+4) Open artifacts\api-server\.env and add:
+
+  BLOCKCHAIN_ENABLED=true
+  BLOCKCHAIN_RPC_URL=http://127.0.0.1:7545
+  BLOCKCHAIN_PRIVATE_KEY=0x<ganache-private-key>
+  BLOCKCHAIN_CONTRACT_ADDRESS=0x<deployed-contract-address>
+  BLOCKCHAIN_AUTO_ANCHOR_ON_VOTE=false
+
+5) Restart api-server and call:
+
+  GET  /api/blockchain/health
+  POST /api/blockchain/elections/:electionId/anchor
+  POST /api/blockchain/elections/:electionId/finalize
+  GET  /api/blockchain/elections/:electionId/verify
+

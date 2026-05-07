@@ -1,0 +1,22 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+     "target": "ES6",
+    "module": "esnext",
+    "outDir": "dist",
+    "rootDir": "src",
+    "types": ["node"] ,
+    "esModuleInterop": true,
+    "skipLibCheck": true
+    
+  },
+  "include": ["src"],
+  "references": [
+    {
+      "path": "../../lib/db"
+    },
+    {
+      "path": "../../lib/api-zod"
+    }
+  ]
+}

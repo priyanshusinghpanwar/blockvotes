@@ -1,0 +1,28 @@
+
+> @workspace/api-server@0.0.0 start E:\Project\Block-Chain\Block-Chain\artifacts\api-server
+> node --enable-source-maps --env-file=.env ./dist/index.mjs
+
+[12:13:24.306] [32mINFO[39m (3604): [36mServer listening[39m
+    [35mport[39m: 3000
+[12:13:24.310] [32mINFO[39m (3604): [36mElection automation started[39m
+    [35mintervalMs[39m: 5000
+[12:13:41.842] [32mINFO[39m (3604): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 1,
+      "method": "GET",
+      "url": "/api/blockchain/health"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 108
+[12:13:56.066] [32mINFO[39m (3604): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 2,
+      "method": "GET",
+      "url": "/api/elections"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 3

@@ -1,0 +1,21 @@
+packages:
+  "framer-motion": "For page transitions, micro-interactions, and blockchain voting visualizations"
+  "recharts": "For displaying election results in beautiful bar charts"
+  "zustand": "For lightweight global state management (auth sessions)"
+  "clsx": "For conditional class names merging"
+  "tailwind-merge": "For merging tailwind classes safely"
+  "lucide-react": "For beautiful consistent iconography"
+  "date-fns": "For formatting dates in the election dashboard"
+
+images:
+  - path: "artifacts/blockvotes/public/images/hero-bg.png"
+    description: "Abstract modern geometric background in deep navy blue and crisp white, representing digital trust, secure data, and blockchain technology. Minimalist, professional civic tech style, subtle gradients."
+    aspect_ratio: "16:9"
+  - path: "artifacts/blockvotes/public/images/auth-bg.png"
+    description: "Soft elegant gradients in subtle navy blue and silver tones, clean and trustworthy background for an authentication page. High quality, smooth."
+    aspect_ratio: "9:16"
+
+notes:
+  - Using generated API hooks from @workspace/api-client-react
+  - Simulating the blockchain elements visually for UX purposes
+  - Using zustand for syncing localStorage auth state

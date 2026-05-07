@@ -1,0 +1,759 @@
+openapi: 3.1.0
+info:
+  title: Api
+  version: 0.1.0
+  description: BlockVotes API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: company
+    description: Company operations
+  - name: election
+    description: Election operations
+  - name: candidate
+    description: Candidate operations
+  - name: voter
+    description: Voter operations
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /company/register:
+    post:
+      operationId: registerCompany
+      tags: [company]
+      summary: Register a new company/admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompanyRegisterInput"
+      responses:
+        "200":
+          description: Company registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+
+  /company/login:
+    post:
+      operationId: loginCompany
+      tags: [company]
+      summary: Login as company
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginInput"
+      responses:
+        "200":
+          description: Login result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+
+  /elections:
+    get:
+      operationId: listElections
+      tags: [election]
+      summary: List all elections for a company
+      parameters:
+        - name: company_id
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of elections
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ElectionsResponse"
+    post:
+      operationId: createElection
+      tags: [election]
+      summary: Create a new election
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateElectionInput"
+      responses:
+        "200":
+          description: Election created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ElectionResponse"
+
+  /elections/{electionId}:
+    get:
+      operationId: getElection
+      tags: [election]
+      summary: Get election details
+      parameters:
+        - name: electionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Election details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ElectionResponse"
+
+  /elections/{electionId}/start:
+    post:
+      operationId: startElection
+      tags: [election]
+      summary: Start an election
+      parameters:
+        - name: electionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Election started
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+
+  /elections/{electionId}/schedule:
+    post:
+      operationId: scheduleElection
+      tags: [election]
+      summary: Schedule automatic election start/end in IST
+      parameters:
+        - name: electionId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ScheduleElectionInput"
+      responses:
+        "200":
+          description: Schedule saved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScheduleElectionResponse"
+
+  /elections/{electionId}/end:
+    post:
+      operationId: endElection
+      tags: [election]
+      summary: End an election and declare results
+      parameters:
+        - name: electionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Election ended
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ElectionResultResponse"
+
+  /candidates:
+    get:
+      operationId: listCandidates
+      tags: [candidate]
+      summary: List candidates for an election
+      parameters:
+        - name: election_id
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of candidates
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CandidatesResponse"
+    post:
+      operationId: addCandidate
+      tags: [candidate]
+      summary: Add a candidate to an election
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddCandidateInput"
+      responses:
+        "200":
+          description: Candidate added
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+
+  /candidates/{candidateId}:
+    delete:
+      operationId: deleteCandidate
+      tags: [candidate]
+      summary: Delete a candidate
+      parameters:
+        - name: candidateId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Candidate deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+
+  /voters:
+    get:
+      operationId: listVoters
+      tags: [voter]
+      summary: List voters for an election
+      parameters:
+        - name: election_id
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of voters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VotersResponse"
+    post:
+      operationId: addVoter
+      tags: [voter]
+      summary: Add a voter to an election
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddVoterInput"
+      responses:
+        "200":
+          description: Voter added
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+
+  /voters/import:
+    post:
+      operationId: importVoters
+      tags: [voter]
+      summary: Import voters from CSV content
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ImportVotersInput"
+      responses:
+        "200":
+          description: Voter import result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ImportVotersResponse"
+
+  /voters/{voterId}:
+    delete:
+      operationId: deleteVoter
+      tags: [voter]
+      summary: Delete a voter
+      parameters:
+        - name: voterId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Voter deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+
+  /voter/login:
+    post:
+      operationId: loginVoter
+      tags: [voter]
+      summary: Login as voter
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VoterLoginInput"
+      responses:
+        "200":
+          description: Login result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VoterAuthResponse"
+
+  /vote:
+    post:
+      operationId: castVote
+      tags: [voter]
+      summary: Cast a vote
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CastVoteInput"
+      responses:
+        "200":
+          description: Vote cast
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required: [status]
+
+    ApiResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+      required: [status, message]
+
+    CompanyRegisterInput:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+      required: [name, email, password]
+
+    LoginInput:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required: [email, password]
+
+    AuthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: object
+          nullable: true
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+            email:
+              type: string
+      required: [status, message]
+
+    CreateElectionInput:
+      type: object
+      properties:
+        company_id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        start_time_ist:
+          type: string
+        end_time_ist:
+          type: string
+      required: [company_id, name, description, start_time_ist, end_time_ist]
+
+    Election:
+      type: object
+      properties:
+        id:
+          type: string
+        company_id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum: [pending, active, ended]
+        winner_candidate_id:
+          type: string
+          nullable: true
+        winner_candidate_name:
+          type: string
+          nullable: true
+        scheduled_start_at:
+          type: string
+          nullable: true
+        scheduled_end_at:
+          type: string
+          nullable: true
+        scheduled_start_ist:
+          type: string
+          nullable: true
+        scheduled_end_ist:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+      required: [id, company_id, name, description, status, created_at]
+
+    ElectionResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          $ref: "#/components/schemas/Election"
+          nullable: true
+      required: [status, message]
+
+    ElectionsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Election"
+      required: [status, message, data]
+
+    ElectionResultResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: object
+          nullable: true
+          properties:
+            winner_name:
+              type: string
+            winner_votes:
+              type: integer
+            results:
+              type: array
+              items:
+                $ref: "#/components/schemas/CandidateResult"
+      required: [status, message]
+
+    ScheduleElectionInput:
+      type: object
+      properties:
+        start_time_ist:
+          type: string
+        end_time_ist:
+          type: string
+      required: [start_time_ist, end_time_ist]
+
+    ScheduleElectionResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: object
+          nullable: true
+          properties:
+            election_id:
+              type: string
+            scheduled_start_at:
+              type: string
+              nullable: true
+            scheduled_end_at:
+              type: string
+              nullable: true
+            scheduled_start_ist:
+              type: string
+              nullable: true
+            scheduled_end_ist:
+              type: string
+              nullable: true
+      required: [status, message]
+
+    CandidateResult:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        votes:
+          type: integer
+      required: [id, name, votes]
+
+    AddCandidateInput:
+      type: object
+      properties:
+        election_id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        email:
+          type: string
+        image_url:
+          type: string
+          nullable: true
+      required: [election_id, name]
+
+    Candidate:
+      type: object
+      properties:
+        id:
+          type: string
+        election_id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        email:
+          type: string
+        image_url:
+          type: string
+          nullable: true
+        votes:
+          type: integer
+      required: [id, election_id, name, description, email, votes]
+
+    CandidatesResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Candidate"
+      required: [status, message, data]
+
+    AddVoterInput:
+      type: object
+      properties:
+        election_id:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+        voter_id:
+          type: string
+          nullable: true
+        mobile:
+          type: string
+          nullable: true
+        age:
+          type: integer
+          nullable: true
+        gender:
+          type: string
+          nullable: true
+      required: [election_id, email, name]
+
+    ImportVotersInput:
+      type: object
+      properties:
+        election_id:
+          type: string
+        csv_content:
+          type: string
+      required: [election_id, csv_content]
+
+    ImportVoterResult:
+      type: object
+      properties:
+        row:
+          type: integer
+        status:
+          type: string
+        name:
+          type: string
+        email_id:
+          type: string
+        message:
+          type: string
+      required: [row, status, name, email_id, message]
+
+    ImportVotersResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            total:
+              type: integer
+            added:
+              type: integer
+            failed:
+              type: integer
+            results:
+              type: array
+              items:
+                $ref: "#/components/schemas/ImportVoterResult"
+      required: [status, message]
+
+    Voter:
+      type: object
+      properties:
+        id:
+          type: string
+        election_id:
+          type: string
+        email:
+          type: string
+        email_id:
+          type: string
+        name:
+          type: string
+        voter_id:
+          type: string
+          nullable: true
+        mobile:
+          type: string
+          nullable: true
+        age:
+          type: integer
+          nullable: true
+        gender:
+          type: string
+          nullable: true
+        has_voted:
+          type: boolean
+      required: [id, election_id, email, name, has_voted]
+
+    VotersResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Voter"
+      required: [status, message, data]
+
+    VoterLoginInput:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        election_id:
+          type: string
+      required: [email, password, election_id]
+
+    VoterAuthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: object
+          nullable: true
+          properties:
+            id:
+              type: string
+            election_id:
+              type: string
+            name:
+              type: string
+            has_voted:
+              type: boolean
+      required: [status, message]
+
+    CastVoteInput:
+      type: object
+      properties:
+        voter_id:
+          type: string
+        election_id:
+          type: string
+        candidate_id:
+          type: string
+      required: [voter_id, election_id, candidate_id]

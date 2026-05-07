@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">BlockVotes</string>
+    <string name="title_activity_main">BlockVotes</string>
+    <string name="package_name">com.blockvotes.mobile</string>
+    <string name="custom_url_scheme">com.blockvotes.mobile</string>
+</resources>
