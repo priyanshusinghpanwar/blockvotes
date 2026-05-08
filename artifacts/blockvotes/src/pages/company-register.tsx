@@ -52,26 +52,26 @@ export default function CompanyRegister() {
   }
 
   return (
-    <PageTransition className="min-h-[calc(100vh-5rem)] flex items-center justify-center relative py-12 px-4">
-      <div className="absolute inset-0 z-0">
+    <PageTransition className="min-h-[calc(100vh-4rem)] flex items-center justify-center relative py-10 px-4 app-section overflow-hidden">
+      <div className="absolute inset-0 z-0 opacity-40">
         <img 
           src={`${import.meta.env.BASE_URL}images/blockchain.jpg`} 
           alt="Blockchain Network" 
           className="w-full h-full object-cover object-center"
         />
-        <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px]"></div>
+        <div className="absolute inset-0 bg-white/85 backdrop-blur-[1px]"></div>
       </div>
 
       <div className="relative z-10 w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="mx-auto w-16 h-16 bg-primary text-primary-foreground rounded-2xl flex items-center justify-center shadow-xl shadow-primary/20 mb-6">
+          <div className="mx-auto w-14 h-14 bg-white text-primary rounded-xl border border-border flex items-center justify-center shadow-sm mb-5">
             <Building2 size={32} className="text-accent" />
           </div>
-          <h1 className="text-3xl font-bold font-display">Create Organization</h1>
+          <h1 className="text-3xl font-bold font-display text-foreground">Create Organization</h1>
           <p className="text-muted-foreground mt-2">Register to start managing secure elections.</p>
         </div>
 
-        <Card className="p-8 glass">
+        <Card className="p-6 sm:p-8 bg-white/95 backdrop-blur-md">
           <form onSubmit={handleSubmit} className="space-y-5">
             <Input 
               label="Organization Name" 
@@ -92,7 +92,7 @@ export default function CompanyRegister() {
             <Input 
               label="Secure Password" 
               type="password" 
-              placeholder="••••••••" 
+              placeholder="Create a secure password" 
               value={password}
               onChange={e => setPassword(e.target.value)}
               required

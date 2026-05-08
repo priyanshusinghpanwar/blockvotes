@@ -13,11 +13,11 @@ const DialogContent = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
 >(({ className, children, ...props }, ref) => (
   <DialogPrimitive.Portal>
-    <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
+    <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-slate-900/35 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        "fixed left-[50%] top-[50%] z-50 w-full max-w-lg translate-x-[-50%] translate-y-[-50%] bg-card rounded-2xl shadow-2xl border border-border",
+        "fixed left-[50%] top-[50%] z-50 w-full max-w-lg translate-x-[-50%] translate-y-[-50%] bg-card rounded-xl shadow-xl border border-border",
         "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
         className
       )}
@@ -55,7 +55,7 @@ export function Dialog({ isOpen, onClose, title, description, children }: Dialog
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
+            className="fixed inset-0 z-50 bg-slate-900/35 backdrop-blur-sm"
             onClick={onClose}
           />
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
@@ -64,7 +64,7 @@ export function Dialog({ isOpen, onClose, title, description, children }: Dialog
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="w-full max-w-lg bg-card rounded-2xl shadow-2xl border border-border pointer-events-auto flex flex-col max-h-[90vh]"
+              className="w-full max-w-lg bg-card rounded-xl shadow-xl border border-border pointer-events-auto flex flex-col max-h-[90vh]"
             >
               <div className="flex items-start justify-between p-6 border-b border-border/50">
                 <div>

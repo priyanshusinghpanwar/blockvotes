@@ -116,7 +116,7 @@ export default function Results() {
   const femalePieData = buildParticipationPieData(femaleRegistered, femaleParticipated)
 
   return (
-    <PageTransition className="min-h-screen bg-background py-10">
+    <PageTransition className="min-h-screen app-section py-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <Link href="/" className="inline-flex items-center text-sm font-semibold text-muted-foreground hover:text-foreground mb-8">
@@ -125,11 +125,11 @@ export default function Results() {
         
         <div className="text-center mb-12">
           {isEnded ? (
-            <div className="inline-flex items-center justify-center p-3 bg-amber-100 text-amber-700 rounded-2xl mb-6 shadow-sm border border-amber-200">
+            <div className="inline-flex items-center justify-center p-3 bg-amber-100 text-amber-700 rounded-xl mb-6 shadow-sm border border-amber-200">
               <Trophy size={32} />
             </div>
           ) : (
-            <div className="inline-flex items-center justify-center p-3 bg-primary/10 text-primary rounded-2xl mb-6 border border-primary/20">
+            <div className="inline-flex items-center justify-center p-3 bg-primary/10 text-primary rounded-xl mb-6 border border-primary/20">
               <Activity size={32} className="animate-pulse" />
             </div>
           )}
@@ -147,7 +147,7 @@ export default function Results() {
             animate={{ scale: 1, opacity: 1 }}
             className="mb-12"
           >
-            <Card className="bg-gradient-to-r from-primary to-primary/90 text-primary-foreground border-none shadow-2xl p-8 md:p-12 text-center relative overflow-hidden">
+            <Card className="bg-primary text-primary-foreground border-none shadow-sm p-8 md:p-12 text-center relative overflow-hidden">
               <div className="absolute top-0 right-0 -mt-10 -mr-10 text-white/5">
                 <Trophy size={200} />
               </div>

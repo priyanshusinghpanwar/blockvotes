@@ -1,0 +1,68 @@
+
+> @workspace/api-server@0.0.0 start E:\Project\Block-Chain\Block-Chain\artifacts\api-server
+> node --enable-source-maps ./dist/index.mjs
+
+[09:42:23.567] [32mINFO[39m (6328): [36mServer listening[39m
+    [35mport[39m: 3000
+[09:42:23.570] [32mINFO[39m (6328): [36mElection automation started[39m
+    [35mintervalMs[39m: 5000
+[09:42:33.067] [32mINFO[39m (6328): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 1,
+      "method": "GET",
+      "url": "/api/healthz"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 26
+[09:42:57.947] [32mINFO[39m (6328): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 2,
+      "method": "OPTIONS",
+      "url": "/api/company/login"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 2
+[09:42:57.950] [32mINFO[39m (6328): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 3,
+      "method": "OPTIONS",
+      "url": "/api/company/login"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[09:44:08.345] [32mINFO[39m (6328): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 4,
+      "method": "GET",
+      "url": "/api/healthz"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 3
+[09:57:18.610] [32mINFO[39m (6328): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 5,
+      "method": "OPTIONS",
+      "url": "/api/company/login"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 27
+[09:57:20.605] [32mINFO[39m (6328): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 6,
+      "method": "POST",
+      "url": "/api/company/login"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1830

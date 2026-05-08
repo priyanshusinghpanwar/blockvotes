@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link, useLocation } from "wouter"
 import { useAuth } from "@/hooks/use-auth"
 import { useListElections, useCreateElection } from "@workspace/api-client-react"
@@ -25,17 +25,16 @@ export default function Dashboard() {
   const [newElectionStartTime, setNewElectionStartTime] = useState("")
   const [newElectionEndDate, setNewElectionEndDate] = useState("")
   const [newElectionEndTime, setNewElectionEndTime] = useState("")
+  const companyId = company?.id || ""
 
-  // Protect route
-  if (!company) {
-    setLocation("/company/login")
-    return null
-  }
+  useEffect(() => {
+    if (!company) setLocation("/company/login")
+  }, [company, setLocation])
 
-  const { data: electionsResponse, isLoading } = useListElections({ company_id: company.id! }, {
+  const { data: electionsResponse, isLoading } = useListElections({ company_id: companyId }, {
     query: {
-      queryKey: ["/api/elections", { company_id: company.id }],
-      enabled: !!company.id
+      queryKey: ["/api/elections", { company_id: companyId }],
+      enabled: !!companyId
     }
   })
   
@@ -93,7 +92,7 @@ export default function Dashboard() {
 
     createMutation.mutate({
       data: {
-        company_id: company.id!,
+        company_id: companyId,
         name: newElectionName,
         description: newElectionDesc,
         start_time_ist: newElectionStartIst,
@@ -102,8 +101,10 @@ export default function Dashboard() {
     })
   }
 
+  if (!company) return null
+
   return (
-    <PageTransition className="min-h-[calc(100vh-5rem)] bg-background py-8">
+    <PageTransition className="min-h-[calc(100vh-4rem)] app-section py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
@@ -139,7 +140,7 @@ export default function Dashboard() {
             <div className="space-y-1.5">
               <label className="text-sm font-semibold text-foreground/80 ml-1">Description</label>
               <textarea 
-                className="flex w-full rounded-xl border-2 border-input bg-card px-4 py-3 text-base font-medium shadow-sm transition-colors focus-visible:outline-none focus-visible:border-primary focus-visible:ring-4 focus-visible:ring-primary/10 min-h-[100px] resize-none"
+                className="flex w-full rounded-lg border border-input bg-white px-4 py-3 text-base font-medium shadow-sm transition-colors focus-visible:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/10 min-h-[100px] resize-none"
                 placeholder="Details about this election..."
                 value={newElectionDesc}
                 onChange={e => setNewElectionDesc(e.target.value)}
@@ -148,7 +149,7 @@ export default function Dashboard() {
             </div>
 
             <div className="space-y-4">
-              <div className="rounded-xl border border-border p-4 bg-muted/20">
+              <div className="rounded-lg border border-border p-4 bg-muted/20">
                 <p className="text-sm font-semibold text-foreground mb-3">1. Start Time (IST)</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div className="space-y-1.5">
@@ -160,7 +161,7 @@ export default function Dashboard() {
                         value={newElectionStartDate}
                         onChange={e => setNewElectionStartDate(e.target.value)}
                         required
-                        className="flex h-12 w-full rounded-xl border-2 border-input bg-card pl-10 pr-3 text-base font-medium shadow-sm transition-colors focus-visible:outline-none focus-visible:border-primary focus-visible:ring-4 focus-visible:ring-primary/10"
+                        className="flex h-12 w-full rounded-lg border border-input bg-white pl-10 pr-3 text-base font-medium shadow-sm transition-colors focus-visible:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/10"
                       />
                     </div>
                   </div>
@@ -173,14 +174,14 @@ export default function Dashboard() {
                         value={newElectionStartTime}
                         onChange={e => setNewElectionStartTime(e.target.value)}
                         required
-                        className="flex h-12 w-full rounded-xl border-2 border-input bg-card pl-10 pr-3 text-base font-medium shadow-sm transition-colors focus-visible:outline-none focus-visible:border-primary focus-visible:ring-4 focus-visible:ring-primary/10"
+                        className="flex h-12 w-full rounded-lg border border-input bg-white pl-10 pr-3 text-base font-medium shadow-sm transition-colors focus-visible:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/10"
                       />
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="rounded-xl border border-border p-4 bg-muted/20">
+              <div className="rounded-lg border border-border p-4 bg-muted/20">
                 <p className="text-sm font-semibold text-foreground mb-3">2. End Time (IST)</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div className="space-y-1.5">
@@ -192,7 +193,7 @@ export default function Dashboard() {
                         value={newElectionEndDate}
                         onChange={e => setNewElectionEndDate(e.target.value)}
                         required
-                        className="flex h-12 w-full rounded-xl border-2 border-input bg-card pl-10 pr-3 text-base font-medium shadow-sm transition-colors focus-visible:outline-none focus-visible:border-primary focus-visible:ring-4 focus-visible:ring-primary/10"
+                        className="flex h-12 w-full rounded-lg border border-input bg-white pl-10 pr-3 text-base font-medium shadow-sm transition-colors focus-visible:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/10"
                       />
                     </div>
                   </div>
@@ -205,7 +206,7 @@ export default function Dashboard() {
                         value={newElectionEndTime}
                         onChange={e => setNewElectionEndTime(e.target.value)}
                         required
-                        className="flex h-12 w-full rounded-xl border-2 border-input bg-card pl-10 pr-3 text-base font-medium shadow-sm transition-colors focus-visible:outline-none focus-visible:border-primary focus-visible:ring-4 focus-visible:ring-primary/10"
+                        className="flex h-12 w-full rounded-lg border border-input bg-white pl-10 pr-3 text-base font-medium shadow-sm transition-colors focus-visible:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/10"
                       />
                     </div>
                   </div>
@@ -227,7 +228,7 @@ export default function Dashboard() {
             ))}
           </div>
         ) : elections.length === 0 ? (
-          <div className="bg-white rounded-3xl border border-dashed border-border p-12 text-center flex flex-col items-center">
+          <div className="bg-white rounded-xl border border-dashed border-border p-8 sm:p-12 text-center flex flex-col items-center shadow-sm">
             <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mb-6">
               <FileLock2 size={32} className="text-muted-foreground" />
             </div>
@@ -250,7 +251,7 @@ export default function Dashboard() {
               
               return (
                 <Link key={election.id} href={`/election/${election.id}`}>
-                  <Card className="h-full hover:shadow-xl hover:border-primary/40 cursor-pointer group flex flex-col">
+                  <Card className="h-full hover:border-primary/40 cursor-pointer group flex flex-col">
                     <CardHeader className="pb-4">
                       <div className="flex justify-between items-start mb-4">
                         <span className={`text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full border ${statusColors[election.status]}`}>

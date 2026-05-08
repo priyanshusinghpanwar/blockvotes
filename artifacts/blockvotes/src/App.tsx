@@ -1,5 +1,7 @@
+import { useEffect } from "react"
 import { Switch, Route, Router as WouterRouter } from "wouter"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { App as CapacitorApp } from "@capacitor/app"
 import { Toaster } from "@/components/ui/toaster"
 import { Navbar } from "@/components/layout"
 
@@ -27,9 +29,9 @@ const queryClient = new QueryClient({
 
 function Router() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden flex flex-col">
       <Navbar />
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 min-w-0 max-w-full overflow-x-hidden flex flex-col">
         <Switch>
           <Route path="/" component={Landing} />
           
@@ -51,10 +53,30 @@ function Router() {
   )
 }
 
+function NativeBackButtonHandler() {
+  useEffect(() => {
+    const removeListener = CapacitorApp.addListener("backButton", ({ canGoBack }) => {
+      if (canGoBack || window.history.length > 1) {
+        window.history.back()
+        return
+      }
+
+      CapacitorApp.exitApp()
+    })
+
+    return () => {
+      removeListener.then((listener) => listener.remove())
+    }
+  }, [])
+
+  return null
+}
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+        <NativeBackButtonHandler />
         <Router />
       </WouterRouter>
       <Toaster />

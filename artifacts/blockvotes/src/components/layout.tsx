@@ -24,21 +24,21 @@ export function Navbar() {
   const isAuthPage = location === '/company/login' || location === '/company/register' || location === '/voter/login' || location === '/'
 
   return (
-    <header className="sticky top-0 z-40 w-full glass border-b border-border/50">
+    <header className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-border shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2 group">
             <img
               src={`${import.meta.env.BASE_URL}images/logo.png`}
               alt="BlockVotes Logo"
-              className="h-10 w-auto group-hover:scale-105 transition-transform"
+              className="h-9 w-auto group-hover:scale-105 transition-transform"
             />
           </Link>
 
-          <nav className="flex items-center gap-4">
+          <nav className="flex items-center gap-3">
             {company && !isAuthPage && (
               <>
-                <div className="hidden md:flex items-center gap-3 px-4 py-2 bg-muted rounded-full">
+                <div className="hidden md:flex items-center gap-3 px-3 py-2 bg-muted rounded-lg">
                   <span className="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
                   <span className="text-sm font-medium text-muted-foreground">Admin: <strong className="text-foreground">{company.name}</strong></span>
                 </div>
@@ -62,11 +62,11 @@ export function Navbar() {
                 <span className="hidden sm:inline">Sign Out</span>
               </button>
             ) : (
-              <div className="hidden md:flex items-center gap-4">
+              <div className="flex items-center gap-2">
                 <Link href="/voter/login" className="text-sm font-semibold text-muted-foreground hover:text-primary transition-colors">
                   Voter Portal
                 </Link>
-                <Link href="/company/login" className="text-sm font-semibold bg-primary text-primary-foreground px-5 py-2.5 rounded-full hover:bg-primary/90 shadow-md shadow-primary/20 transition-all hover:-translate-y-0.5">
+                <Link href="/company/login" className="text-sm font-semibold bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-primary/90 shadow-sm transition-colors">
                   Admin Login
                 </Link>
               </div>

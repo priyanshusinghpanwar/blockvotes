@@ -275,7 +275,7 @@ export default function VoterProfile() {
   if (!voter) return null
 
   return (
-    <PageTransition className="min-h-[calc(100vh-5rem)] bg-background py-10">
+    <PageTransition className="min-h-[calc(100vh-4rem)] app-section py-10">
       <div className="max-w-3xl mx-auto px-4">
         <Card className="p-6 md:p-8">
           <div className="mb-6">
@@ -309,33 +309,33 @@ export default function VoterProfile() {
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-semibold mb-1.5">Voter ID</label>
-                    <input value={voterId} readOnly className="w-full rounded-xl border border-input px-4 py-2.5 bg-muted text-muted-foreground" />
+                    <input value={voterId} readOnly className="w-full rounded-lg border border-input px-4 py-2.5 bg-muted text-muted-foreground" />
                   </div>
                   <div>
                     <label className="block text-sm font-semibold mb-1.5">Registered Email</label>
-                    <input value={email} readOnly className="w-full rounded-xl border border-input px-4 py-2.5 bg-muted text-muted-foreground" />
+                    <input value={email} readOnly className="w-full rounded-lg border border-input px-4 py-2.5 bg-muted text-muted-foreground" />
                   </div>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-semibold mb-1.5">Full Name</label>
-                    <input value={name} onChange={(e) => setName(e.target.value)} disabled={!isPending} className="w-full rounded-xl border border-input px-4 py-2.5" />
+                    <input value={name} onChange={(e) => setName(e.target.value)} disabled={!isPending} className="w-full rounded-lg border border-input bg-white px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary disabled:bg-muted disabled:text-muted-foreground" />
                   </div>
                   <div>
                     <label className="block text-sm font-semibold mb-1.5">Mobile Number</label>
-                    <input value={mobile} onChange={(e) => setMobile(e.target.value)} disabled={!isPending} className="w-full rounded-xl border border-input px-4 py-2.5" />
+                    <input value={mobile} onChange={(e) => setMobile(e.target.value)} disabled={!isPending} className="w-full rounded-lg border border-input bg-white px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary disabled:bg-muted disabled:text-muted-foreground" />
                   </div>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-semibold mb-1.5">Age</label>
-                    <input value={age} onChange={(e) => setAge(e.target.value.replace(/\D/g, ""))} disabled={!isPending} className="w-full rounded-xl border border-input px-4 py-2.5" />
+                    <input value={age} onChange={(e) => setAge(e.target.value.replace(/\D/g, ""))} disabled={!isPending} className="w-full rounded-lg border border-input bg-white px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary disabled:bg-muted disabled:text-muted-foreground" />
                   </div>
                   <div>
                     <label className="block text-sm font-semibold mb-1.5">Gender</label>
-                    <select value={gender} onChange={(e) => setGender(e.target.value)} disabled={!isPending} className="w-full rounded-xl border border-input px-4 py-2.5 bg-background">
+                    <select value={gender} onChange={(e) => setGender(e.target.value)} disabled={!isPending} className="w-full rounded-lg border border-input px-4 py-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary disabled:bg-muted disabled:text-muted-foreground">
                       <option value="male">Male</option>
                       <option value="female">Female</option>
                       <option value="other">Other</option>
@@ -346,7 +346,7 @@ export default function VoterProfile() {
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-semibold mb-1.5">Voter Photo</label>
-                    <label className="flex items-center justify-center gap-2 w-full rounded-xl border border-dashed border-input px-4 py-2.5 cursor-pointer hover:bg-muted/40">
+                    <label className="flex items-center justify-center gap-2 w-full rounded-lg border border-dashed border-input px-4 py-2.5 cursor-pointer bg-white hover:bg-muted/40">
                       <Upload size={16} />
                       <span className="text-sm">Upload Photo</span>
                       <input type="file" accept="image/*" className="hidden" disabled={!isPending} onChange={(e) => void handlePhotoUpload(e.target.files?.[0] || null)} />
@@ -356,7 +356,7 @@ export default function VoterProfile() {
 
                   <div>
                     <label className="block text-sm font-semibold mb-1.5">Signature</label>
-                    <label className="flex items-center justify-center gap-2 w-full rounded-xl border border-dashed border-input px-4 py-2.5 cursor-pointer hover:bg-muted/40">
+                    <label className="flex items-center justify-center gap-2 w-full rounded-lg border border-dashed border-input px-4 py-2.5 cursor-pointer bg-white hover:bg-muted/40">
                       <Upload size={16} />
                       <span className="text-sm">Upload Signature</span>
                       <input type="file" accept="image/*" className="hidden" disabled={!isPending} onChange={(e) => void handleSignatureUpload(e.target.files?.[0] || null)} />

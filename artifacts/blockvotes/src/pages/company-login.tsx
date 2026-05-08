@@ -51,27 +51,27 @@ export default function CompanyLogin() {
   }
 
   return (
-    <PageTransition className="min-h-[calc(100vh-5rem)] flex items-center justify-center relative py-12 px-4">
+    <PageTransition className="min-h-[calc(100vh-4rem)] flex items-center justify-center relative py-10 px-4 app-section overflow-hidden">
       {/* Background Image - blockchain network */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 opacity-40">
         <img 
           src={`${import.meta.env.BASE_URL}images/blockchain.jpg`} 
           alt="Blockchain Network" 
           className="w-full h-full object-cover object-center"
         />
-        <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px]"></div>
+        <div className="absolute inset-0 bg-white/85 backdrop-blur-[1px]"></div>
       </div>
 
       <div className="relative z-10 w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="mx-auto w-16 h-16 bg-primary text-primary-foreground rounded-2xl flex items-center justify-center shadow-xl shadow-primary/20 mb-6">
-            <Shield size={32} className="text-accent" />
+          <div className="mx-auto w-14 h-14 bg-white text-primary rounded-xl border border-border flex items-center justify-center shadow-sm mb-5">
+            <Shield size={28} className="text-accent" />
           </div>
-          <h1 className="text-3xl font-bold font-display">Admin Portal</h1>
+          <h1 className="text-3xl font-bold font-display text-foreground">Admin Portal</h1>
           <p className="text-muted-foreground mt-2">Sign in to manage your organizational elections.</p>
         </div>
 
-        <Card className="p-8 glass">
+        <Card className="p-6 sm:p-8 bg-white/95 backdrop-blur-md">
           <form onSubmit={handleSubmit} className="space-y-6">
             <Input 
               label="Organization Email" 
@@ -79,6 +79,7 @@ export default function CompanyLogin() {
               placeholder="admin@company.com" 
               value={email}
               onChange={e => setEmail(e.target.value)}
+              className="bg-white text-foreground border-input placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-primary/10"
               required
             />
             <Input 
@@ -87,6 +88,7 @@ export default function CompanyLogin() {
               placeholder="••••••••" 
               value={password}
               onChange={e => setPassword(e.target.value)}
+              className="bg-white text-foreground border-input placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-primary/10"
               required
             />
             <Button 
@@ -99,9 +101,9 @@ export default function CompanyLogin() {
             </Button>
           </form>
 
-          <div className="mt-8 text-center text-sm text-muted-foreground">
+          <div className="mt-8 text-center text-sm text-slate-600">
             Don't have an organization account? <br/>
-            <Link href="/company/register" className="text-primary font-semibold hover:underline mt-1 inline-block">
+            <Link href="/company/register" className="text-sky-700 font-semibold hover:underline mt-1 inline-block">
               Register your organization
             </Link>
           </div>

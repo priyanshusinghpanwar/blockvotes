@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link, useLocation } from "wouter"
 import { useAuth } from "@/hooks/use-auth"
 import { useGetElection } from "@workspace/api-client-react"
@@ -32,10 +32,11 @@ export default function VoterPassword() {
     },
   })
 
-  if (!voter?.id || !voter?.election_id) {
-    setLocation("/voter/login")
-    return null
-  }
+  useEffect(() => {
+    if (!voter?.id || !voter?.election_id) setLocation("/voter/login")
+  }, [setLocation, voter?.election_id, voter?.id])
+
+  if (!voter?.id || !voter?.election_id) return null
 
   const isPending = electionRes?.data?.status === "pending"
 
@@ -109,7 +110,7 @@ export default function VoterPassword() {
   }
 
   return (
-    <PageTransition className="min-h-[calc(100vh-5rem)] bg-background py-10">
+    <PageTransition className="min-h-[calc(100vh-4rem)] app-section py-10">
       <div className="max-w-xl mx-auto px-4">
         <Card className="p-6 md:p-8">
           <Link href="/voter/profile" className="inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-foreground mb-5">
@@ -133,7 +134,7 @@ export default function VoterPassword() {
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value.replace(/[^a-zA-Z0-9]/g, "").toUpperCase())}
                 disabled={!isPending}
-                className="w-full rounded-xl border border-input px-4 py-2.5"
+                className="w-full rounded-lg border border-input bg-white px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary disabled:bg-muted disabled:text-muted-foreground"
                 placeholder="Enter current password"
                 required
               />
@@ -146,7 +147,7 @@ export default function VoterPassword() {
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value.replace(/[^a-zA-Z0-9]/g, "").toUpperCase())}
                 disabled={!isPending}
-                className="w-full rounded-xl border border-input px-4 py-2.5"
+                className="w-full rounded-lg border border-input bg-white px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary disabled:bg-muted disabled:text-muted-foreground"
                 placeholder="Enter new password"
                 required
               />
@@ -159,7 +160,7 @@ export default function VoterPassword() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value.replace(/[^a-zA-Z0-9]/g, "").toUpperCase())}
                 disabled={!isPending}
-                className="w-full rounded-xl border border-input px-4 py-2.5"
+                className="w-full rounded-lg border border-input bg-white px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary disabled:bg-muted disabled:text-muted-foreground"
                 placeholder="Confirm new password"
                 required
               />

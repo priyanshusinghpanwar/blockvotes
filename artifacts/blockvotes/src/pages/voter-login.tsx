@@ -318,41 +318,39 @@ export default function VoterLogin() {
   }, [step, resendAvailableAtIso])
 
   return (
-    <PageTransition className="min-h-[calc(100vh-5rem)] flex items-center justify-center relative py-12 px-4">
-      <div className="absolute inset-0 z-0">
+    <PageTransition className="min-h-[calc(100vh-4rem)] w-full max-w-full overflow-x-hidden flex items-center justify-center relative py-10 px-4 sm:py-12 app-section">
+      <div className="absolute inset-0 z-0 overflow-hidden opacity-35">
         <img
           src={`${import.meta.env.BASE_URL}images/blockchain.jpg`}
           alt="Blockchain Network"
           className="w-full h-full object-cover object-center"
         />
-        <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-[2px]"></div>
-        <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-cyan-500/20 blur-3xl"></div>
-        <div className="absolute -bottom-28 -left-16 w-80 h-80 rounded-full bg-blue-500/20 blur-3xl"></div>
+        <div className="absolute inset-0 bg-white/85 backdrop-blur-[1px]"></div>
       </div>
 
-      <div className="relative z-10 w-full max-w-lg">
+      <div className="relative z-10 w-full max-w-lg min-w-0">
         <div className="text-center mb-6">
-          <div className="mx-auto w-20 h-20 bg-white/10 text-white rounded-full border border-white/20 flex items-center justify-center backdrop-blur-md mb-5 shadow-2xl">
+          <div className="mx-auto w-16 h-16 bg-white text-primary rounded-xl border border-border flex items-center justify-center mb-5 shadow-sm">
             <Fingerprint size={40} className="text-accent" />
           </div>
-          <h1 className="text-3xl font-bold font-display text-white">Voter Access Portal</h1>
-          <p className="text-slate-300 mt-2">
+          <h1 className="text-3xl font-bold font-display text-foreground">Voter Access Portal</h1>
+          <p className="text-muted-foreground mt-2">
             {step === "credentials"
               ? "Secure login using election ID, registered email, and password."
               : "Enter the OTP sent to your registered email and mobile number."}
           </p>
-          <div className="mt-4 flex items-center justify-center gap-2 text-xs text-slate-300">
-            <span className={`rounded-full px-3 py-1 border ${step === "credentials" ? "border-accent/60 bg-accent/20 text-cyan-100" : "border-white/15 bg-white/5"}`}>
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground">
+            <span className={`rounded-lg px-3 py-1 border ${step === "credentials" ? "border-accent/30 bg-accent/10 text-primary" : "border-border bg-white"}`}>
               1. Identity Check
             </span>
-            <span className={`rounded-full px-3 py-1 border ${step === "otp" ? "border-accent/60 bg-accent/20 text-cyan-100" : "border-white/15 bg-white/5"}`}>
+            <span className={`rounded-lg px-3 py-1 border ${step === "otp" ? "border-accent/30 bg-accent/10 text-primary" : "border-border bg-white"}`}>
               2. OTP Verification
             </span>
           </div>
         </div>
 
-        <Card className="p-8 glass-dark text-white border-white/10 shadow-2xl">
-          <div className="mb-5 rounded-xl border border-cyan-300/20 bg-cyan-300/10 p-3 text-cyan-100 text-sm flex items-start gap-2">
+        <Card className="p-5 sm:p-8 bg-white/95 backdrop-blur-md max-w-full">
+          <div className="mb-5 rounded-lg border border-sky-200 bg-sky-50 p-3 text-sky-900 text-sm flex items-start gap-2">
             <ShieldCheck size={18} className="shrink-0 mt-0.5" />
             <span>Your credentials and vote session are protected with encrypted verification.</span>
           </div>
@@ -360,39 +358,39 @@ export default function VoterLogin() {
             {step === "credentials" ? (
               <>
                 <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-slate-300 ml-1">Election ID</label>
+                  <label className="text-sm font-semibold text-foreground/80 ml-1">Election ID</label>
                   <div className="relative">
-                    <Hash size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <Hash size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
                     <input
                       type="text"
-                      placeholder="Paste the ID provided by your admin"
+                      placeholder="Election ID"
                       value={electionId}
                       onChange={e => setElectionId(e.target.value)}
                       required
-                      className="flex w-full rounded-xl border border-white/20 bg-white/5 pl-11 pr-4 py-3 text-base text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent transition-all"
+                      className="flex w-full rounded-lg border border-input bg-white pl-11 pr-4 py-3 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary transition-all"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-slate-300 ml-1">Registered Email</label>
+                  <label className="text-sm font-semibold text-foreground/80 ml-1">Registered Email</label>
                   <div className="relative">
-                    <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
                     <input
                       type="email"
                       placeholder="voter@example.com"
                       value={email}
                       onChange={e => setEmail(e.target.value)}
                       required
-                      className="flex w-full rounded-xl border border-white/20 bg-white/5 pl-11 pr-4 py-3 text-base text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent transition-all"
+                      className="flex w-full rounded-lg border border-input bg-white pl-11 pr-4 py-3 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary transition-all"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-slate-300 ml-1">Password</label>
+                  <label className="text-sm font-semibold text-foreground/80 ml-1">Password</label>
                   <div className="relative">
-                    <KeyRound size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <KeyRound size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
                     <input
                       type="text"
                       inputMode="text"
@@ -402,17 +400,17 @@ export default function VoterLogin() {
                       value={password}
                       onChange={e => setPassword(e.target.value.replace(/[^a-zA-Z0-9]/g, "").toUpperCase())}
                       required
-                      className="flex w-full rounded-xl border border-white/20 bg-white/5 pl-11 pr-4 py-3 text-base text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent transition-all tracking-widest font-mono text-center text-lg"
+                      className="flex w-full min-w-0 rounded-lg border border-input bg-white pl-11 pr-4 py-3 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary transition-all tracking-widest font-mono text-center sm:text-lg"
                     />
                   </div>
-                  <p className="text-xs text-slate-400 pl-1">
+                  <p className="text-xs text-muted-foreground pl-1">
                     {passwordSentNote || "Password is sent to your mobile number on the date when credentials email is sent."}
                   </p>
                 </div>
 
                 <Button
                   type="submit"
-                  className="w-full mt-4 bg-accent hover:bg-accent/90 text-accent-foreground font-bold shadow-lg shadow-accent/20"
+                  className="w-full mt-4 whitespace-normal leading-snug"
                   size="lg"
                   isLoading={isSendingOtp}
                 >
@@ -421,17 +419,17 @@ export default function VoterLogin() {
               </>
             ) : (
               <>
-                <div className="rounded-xl border border-white/20 bg-white/5 p-4 text-sm">
-                  <p className="text-slate-200 font-medium">OTP sent to</p>
-                  <p className="text-slate-300 mt-1">{maskedEmail || email}</p>
-                  <p className="text-slate-300">{maskedMobile || "registered mobile"}</p>
-                  <p className={`mt-2 font-semibold ${otpExpired ? "text-red-300" : "text-emerald-300"}`}>
+                <div className="rounded-lg border border-border bg-muted/40 p-4 text-sm">
+                  <p className="text-foreground font-medium">OTP sent to</p>
+                  <p className="text-muted-foreground mt-1">{maskedEmail || email}</p>
+                  <p className="text-muted-foreground">{maskedMobile || "registered mobile"}</p>
+                  <p className={`mt-2 font-semibold ${otpExpired ? "text-red-600" : "text-emerald-600"}`}>
                     {otpExpired ? "OTP expired" : `OTP valid for ${otpExpiresText} (max 10 minutes)`}
                   </p>
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-slate-300 ml-1">Enter OTP</label>
+                  <label className="text-sm font-semibold text-foreground/80 ml-1">Enter OTP</label>
                   <input
                     type="text"
                     inputMode="numeric"
@@ -440,13 +438,13 @@ export default function VoterLogin() {
                     value={otp}
                     onChange={e => setOtp(e.target.value.replace(/\D/g, ""))}
                     required
-                    className="flex w-full rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-base text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent transition-all tracking-[0.35em] font-mono text-center text-lg"
+                    className="flex w-full rounded-lg border border-input bg-white px-4 py-3 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary transition-all tracking-[0.35em] font-mono text-center text-lg"
                   />
                 </div>
 
                 <Button
                   type="submit"
-                  className="w-full mt-2 bg-accent hover:bg-accent/90 text-accent-foreground font-bold shadow-lg shadow-accent/20"
+                  className="w-full mt-2"
                   size="lg"
                   isLoading={isVerifyingOtp}
                   disabled={otpExpired}
@@ -457,8 +455,8 @@ export default function VoterLogin() {
                 <div className="flex gap-2">
                   <Button
                     type="button"
-                    variant="ghost"
-                    className="flex-1 border border-white/25 bg-white/10 text-white hover:bg-white/20"
+                    variant="outline"
+                    className="flex-1"
                     onClick={() => {
                       setStep("credentials")
                       setOtp("")
@@ -471,8 +469,8 @@ export default function VoterLogin() {
                   </Button>
                   <Button
                     type="button"
-                    variant="ghost"
-                    className="flex-1 border border-white/25 bg-white/10 text-white hover:bg-white/20"
+                    variant="secondary"
+                    className="flex-1"
                     onClick={sendLoginOtp}
                     isLoading={isSendingOtp}
                     disabled={isSendingOtp || resendCooldownActive}

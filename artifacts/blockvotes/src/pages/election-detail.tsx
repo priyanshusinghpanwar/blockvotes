@@ -397,9 +397,9 @@ export default function ElectionDetail() {
   const isEnded = election.status === 'ended'
 
   return (
-    <PageTransition className="min-h-screen bg-background pb-20">
+    <PageTransition className="min-h-screen app-section pb-20">
       {/* Header */}
-      <div className="bg-white border-b border-border pt-8 pb-0">
+      <div className="bg-white/90 backdrop-blur border-b border-border pt-8 pb-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link href="/dashboard" className="inline-flex items-center text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors mb-6">
             <ArrowLeft size={16} className="mr-2" /> Back to Dashboard
@@ -448,7 +448,7 @@ export default function ElectionDetail() {
           </div>
 
           {/* Tabs */}
-          <div className="flex gap-8 border-b border-transparent">
+          <div className="flex gap-4 sm:gap-8 border-b border-transparent overflow-x-auto">
             {[
               { key: "overview", label: "Overview" },
               { key: "candidates", label: "Candidates" },
@@ -489,7 +489,7 @@ export default function ElectionDetail() {
             </Card>
             <Card className="p-6">
               <div className="flex items-center gap-4 mb-4">
-                <div className="p-3 bg-purple-50 text-purple-600 rounded-xl"><Users size={24}/></div>
+                      <div className="p-3 bg-slate-100 text-slate-700 rounded-xl"><Users size={24}/></div>
                 <div>
                   <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Registered Voters</p>
                   <p className="text-3xl font-bold font-display">{voters.length}</p>
@@ -602,7 +602,7 @@ export default function ElectionDetail() {
             )}
             
             {isPending && (
-              <div className="md:col-span-3 bg-blue-50 border border-blue-200 rounded-2xl p-6 flex items-start gap-4">
+              <div className="md:col-span-3 bg-blue-50 border border-blue-200 rounded-xl p-6 flex items-start gap-4">
                 <AlertCircle className="text-blue-600 shrink-0 mt-1" />
                 <div>
                   <h4 className="text-blue-900 font-bold text-lg">Setup Phase</h4>
@@ -612,7 +612,7 @@ export default function ElectionDetail() {
             )}
 
             {isPending && (
-              <Card className="md:col-span-3 p-6 border-primary/20 bg-primary/5">
+              <Card className="md:col-span-3 p-6 border-primary/20 bg-white">
                 <h4 className="text-lg font-bold mb-1">Automated Election Timing (IST)</h4>
                 <p className="text-sm text-muted-foreground mb-3">
                   Start and end times are configured during election creation. This election will run automatically.
@@ -770,7 +770,7 @@ export default function ElectionDetail() {
               )}
             </div>
 
-            <div className="bg-white rounded-2xl border border-border overflow-hidden shadow-sm">
+            <div className="bg-white rounded-xl border border-border overflow-hidden shadow-sm">
               <div className="overflow-x-auto">
                 <table className="w-full text-left">
                   <thead className="bg-muted/50 text-muted-foreground text-xs uppercase font-bold tracking-wider">

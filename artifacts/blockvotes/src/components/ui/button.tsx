@@ -10,19 +10,19 @@ export interface ButtonProps
 }
 
 const variantClasses = {
-  default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-md shadow-primary/20",
+  default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm",
   destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm",
-  outline: "border-2 border-input bg-background hover:bg-accent/5 hover:text-accent-foreground hover:border-accent/30",
+  outline: "border border-input bg-white text-foreground hover:bg-slate-50 hover:border-slate-300",
   secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-  ghost: "hover:bg-accent/10 hover:text-accent",
+  ghost: "hover:bg-slate-100 hover:text-foreground",
   link: "text-primary underline-offset-4 hover:underline",
-  accent: "bg-accent text-accent-foreground hover:bg-accent/90 shadow-md shadow-accent/20",
+  accent: "bg-accent text-accent-foreground hover:bg-accent/90 shadow-sm",
 }
 
 const sizeClasses = {
   default: "h-11 px-5 py-2",
   sm: "h-9 rounded-md px-3 text-xs",
-  lg: "h-14 rounded-xl px-8 text-lg font-semibold",
+  lg: "h-12 rounded-lg px-6 text-base font-semibold",
   icon: "h-11 w-11",
 }
 
@@ -30,7 +30,7 @@ export function buttonVariants(opts?: { variant?: ButtonProps["variant"]; size?:
   const variant = opts?.variant ?? "default"
   const size = opts?.size ?? "default"
   return cn(
-    "inline-flex items-center justify-center rounded-lg font-medium transition-all duration-200 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50",
+    "inline-flex items-center justify-center rounded-lg font-medium transition-colors duration-200 active:scale-[0.99] disabled:pointer-events-none disabled:opacity-50",
     variantClasses[variant],
     sizeClasses[size],
   )
