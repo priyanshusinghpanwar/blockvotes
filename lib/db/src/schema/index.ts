@@ -72,6 +72,7 @@ export const votersTable = pgTable(
       .notNull()
       .references(() => electionsTable.id, { onDelete: "cascade" }),
     voterId: text("voter_id"),
+    aadharId: text("aadhar_id"),
     mobile: text("mobile"),
     email: text("email").notNull(),
     name: text("name").notNull(),
@@ -90,6 +91,7 @@ export const votersTable = pgTable(
     votedIdx: index("voters_election_has_voted_idx").on(table.electionId, table.hasVoted),
     emailUniqueIdx: uniqueIndex("voters_election_email_uidx").on(table.electionId, table.email),
     voterIdUniqueIdx: uniqueIndex("voters_election_voter_id_uidx").on(table.electionId, table.voterId),
+    aadharIdUniqueIdx: uniqueIndex("voters_election_aadhar_id_uidx").on(table.electionId, table.aadharId),
   }),
 );
 

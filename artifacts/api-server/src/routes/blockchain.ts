@@ -14,6 +14,10 @@ import {
 
 const router: IRouter = Router();
 
+function getRouteParam(value: string | string[] | undefined): string {
+  return Array.isArray(value) ? (value[0] ?? "") : (value ?? "");
+}
+
 router.get("/health", async (req, res) => {
   try {
     const health = await getBlockchainHealth();
@@ -26,7 +30,7 @@ router.get("/health", async (req, res) => {
 
 router.get("/elections/:electionId/anchors", async (req, res) => {
   try {
-    const { electionId } = req.params;
+    const electionId = getRouteParam(req.params.electionId);
     const data = await getElectionAnchors(electionId);
     res.json({ status: "success", message: "Election anchors fetched", data });
   } catch (err) {
@@ -37,7 +41,7 @@ router.get("/elections/:electionId/anchors", async (req, res) => {
 
 router.post("/elections/:electionId/anchor", requireAdminAuth, async (req, res) => {
   try {
-    const { electionId } = req.params;
+    const electionId = getRouteParam(req.params.electionId);
     const companyId = requireAdminCompanyId(req);
     const election = await ensureElectionBelongsToAdmin(electionId, companyId);
     if (!election) {
@@ -67,7 +71,7 @@ router.post("/elections/:electionId/anchor", requireAdminAuth, async (req, res) 
 
 router.post("/elections/:electionId/finalize", requireAdminAuth, async (req, res) => {
   try {
-    const { electionId } = req.params;
+    const electionId = getRouteParam(req.params.electionId);
     const companyId = requireAdminCompanyId(req);
     const election = await ensureElectionBelongsToAdmin(electionId, companyId);
     if (!election) {
@@ -97,7 +101,7 @@ router.post("/elections/:electionId/finalize", requireAdminAuth, async (req, res
 
 router.get("/elections/:electionId/verify", async (req, res) => {
   try {
-    const { electionId } = req.params;
+    const electionId = getRouteParam(req.params.electionId);
     const data = await verifyElectionAnchors(electionId);
     res.json({ status: "success", message: "Election proof verification complete", data });
   } catch (err) {

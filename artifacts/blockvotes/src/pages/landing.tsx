@@ -1,6 +1,6 @@
 import { Link } from "wouter"
 import { Button } from "@/components/ui/button"
-import { Building2, Fingerprint, Lock, BarChart3, ChevronRight, ShieldCheck } from "lucide-react"
+import { Fingerprint, Lock, BarChart3, ShieldCheck } from "lucide-react"
 import { PageTransition } from "@/components/layout"
 import { motion } from "framer-motion"
 
@@ -29,47 +29,20 @@ export default function Landing() {
               A clean portal for voters and administrators to manage secure organizational elections.
             </p>
 
-            <div className="grid md:grid-cols-3 gap-4 mb-14">
-              {[
-                {
-                  icon: <Fingerprint className="h-6 w-6" />,
-                  title: "Cast Vote",
-                  desc: "Enter election details and complete OTP verification.",
-                  href: "/voter/login?mode=vote",
-                  cta: "Vote Now",
-                },
-                {
-                  icon: <Lock className="h-6 w-6" />,
-                  title: "Voter Profile",
-                  desc: "Update profile, photo, signature, and password before voting opens.",
-                  href: "/voter/login?mode=profile",
-                  cta: "Open Profile",
-                },
-                {
-                  icon: <Building2 className="h-6 w-6" />,
-                  title: "Admin Portal",
-                  desc: "Create elections, add candidates, import voters, and view results.",
-                  href: "/company/login",
-                  cta: "Manage Elections",
-                },
-              ].map((item) => (
-                <Link key={item.title} href={item.href} className="group">
-                  <div className="h-full rounded-xl border border-border bg-white p-6 shadow-sm transition-colors hover:border-primary/30 hover:bg-slate-50">
-                    <div className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                      {item.icon}
-                    </div>
-                    <h2 className="text-xl font-bold font-display mb-2">{item.title}</h2>
-                    <p className="text-sm text-muted-foreground leading-relaxed mb-5">{item.desc}</p>
-                    <span className="inline-flex items-center text-sm font-semibold text-primary">
-                      {item.cta}
-                      <ChevronRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </span>
-                  </div>
-                </Link>
-              ))}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-14">
+              <Link href="/voter/login?mode=vote" className="w-full sm:w-auto">
+                <Button size="lg" className="w-full sm:min-w-44">
+                  Cast Your Vote
+                </Button>
+              </Link>
+              <Link href="/company/login" className="w-full sm:w-auto">
+                <Button size="lg" variant="outline" className="w-full sm:min-w-44">
+                  Admin Portal
+                </Button>
+              </Link>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-4">
+            <div className="grid md:grid-cols-3 gap-6 border-t border-border pt-8">
               {[
                 {
                   icon: <Lock className="h-8 w-8 text-primary" />,
@@ -87,8 +60,8 @@ export default function Landing() {
                   desc: "Admins and voters can review participation and result summaries."
                 }
               ].map((feature, i) => (
-                <div key={feature.title} className="rounded-xl bg-white/70 p-5 border border-border">
-                  <div className="w-11 h-11 bg-primary/5 rounded-lg flex items-center justify-center mb-4">
+                <div key={feature.title} className="px-2">
+                  <div className="w-10 h-10 bg-white rounded-lg border border-border flex items-center justify-center mb-4 shadow-sm">
                     {feature.icon}
                   </div>
                   <h3 className="text-base font-bold font-display mb-2">{feature.title}</h3>

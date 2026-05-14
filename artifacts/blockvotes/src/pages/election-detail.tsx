@@ -16,12 +16,18 @@ import { PageTransition } from "@/components/layout"
 import { useToast } from "@/hooks/use-toast"
 import { 
   ArrowLeft, Users, UserSquare2, Square, Trophy, 
-  Trash2, Plus, AlertCircle, Copy, CheckCheck, BadgeCheck
+  Trash2, Plus, AlertCircle, Copy, CheckCheck, Activity, BarChart3, Percent
 } from "lucide-react"
 import {
+  Bar,
+  BarChart,
   CartesianGrid,
+  Cell,
+  Legend,
   Line,
   LineChart,
+  Pie,
+  PieChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -88,6 +94,10 @@ const timeframeOptions = [
   { value: "3h", label: "3 hours" },
 ] as const
 
+type ElectionDetailTab = "overview" | "analytics" | "candidates" | "voters"
+
+const analyticsColors = ["#0EA5E9", "#14B8A6", "#F59E0B", "#6366F1", "#22C55E", "#EF4444"]
+
 function buildFileKey(file: File | null): string {
   if (!file) return ""
   return `${file.name}:${file.size}:${file.lastModified}`
@@ -151,7 +161,7 @@ export default function ElectionDetail() {
   const { toast } = useToast()
   const queryClient = useQueryClient()
   
-  const [activeTab, setActiveTab] = useState<"overview" | "candidates" | "voters" | "verification">("overview")
+  const [activeTab, setActiveTab] = useState<ElectionDetailTab>("overview")
   const [copiedId, setCopiedId] = useState<string | null>(null)
 
   // Modals state
@@ -172,8 +182,28 @@ export default function ElectionDetail() {
 
   // Queries
   const { data: electionRes, isLoading: loadingE } = useGetElection(id, { query: { queryKey: [`/api/elections/${id}`], enabled: !!id } })
-  const { data: candidatesRes } = useListCandidates({ election_id: id }, { query: { queryKey: ["/api/candidates", { election_id: id }], enabled: !!id } })
-  const { data: votersRes } = useListVoters({ election_id: id }, { query: { queryKey: ["/api/voters", { election_id: id }], enabled: !!id } })
+  const { data: candidatesRes } = useListCandidates(
+    { election_id: id },
+    {
+      query: {
+        queryKey: ["/api/candidates", { election_id: id }],
+        enabled: !!id,
+        refetchInterval: activeTab === "analytics" ? 15 * 1000 : false,
+        refetchIntervalInBackground: true,
+      },
+    },
+  )
+  const { data: votersRes } = useListVoters(
+    { election_id: id },
+    {
+      query: {
+        queryKey: ["/api/voters", { election_id: id }],
+        enabled: !!id,
+        refetchInterval: activeTab === "analytics" ? 15 * 1000 : false,
+        refetchIntervalInBackground: true,
+      },
+    },
+  )
   const { data: hourlyTrendRes, isLoading: loadingTrend } = useQuery({
     queryKey: ["/api/elections/hourly-trend", id, selectedTrendTimeframe],
     enabled: !!id && electionRes?.data?.status !== "pending",
@@ -188,8 +218,28 @@ export default function ElectionDetail() {
   const election = electionRes?.data
   const candidates = candidatesRes?.data || []
   const voters = votersRes?.data || []
-  const verifiedProfileVoters = voters.filter(voter => Boolean((voter as any).profile_completed))
-  const unverifiedProfileVoters = voters.filter(voter => !Boolean((voter as any).profile_completed))
+  const registeredVoterCount = voters.length
+  const totalVotesCast = voters.filter(voter => voter.has_voted).length
+  const pendingVoteCount = Math.max(registeredVoterCount - totalVotesCast, 0)
+  const turnoutPercentage = registeredVoterCount > 0
+    ? Number(((totalVotesCast / registeredVoterCount) * 100).toFixed(1))
+    : 0
+  const candidateVoteTotal = candidates.reduce((sum, candidate) => sum + Number((candidate as any).votes ?? 0), 0)
+  const candidateChartData = candidates.map((candidate, index) => {
+    const votes = Number((candidate as any).votes ?? 0)
+    return {
+      id: candidate.id,
+      name: candidate.name,
+      votes,
+      percentage: totalVotesCast > 0 ? Number(((votes / totalVotesCast) * 100).toFixed(1)) : 0,
+      fill: analyticsColors[index % analyticsColors.length],
+    }
+  })
+  const leadingCandidate = [...candidateChartData].sort((a, b) => b.votes - a.votes)[0]
+  const participationData = [
+    { name: "Voted", value: totalVotesCast, fill: "#0EA5E9" },
+    { name: "Pending", value: pendingVoteCount, fill: "#CBD5E1" },
+  ]
   const currentCsvFileKey = buildFileKey(votersCsvFile)
   const isPreviewReadyForCurrentFile = Boolean(
     votersCsvFile && csvPreview && csvPreviewFileKey && csvPreviewFileKey === currentCsvFileKey,
@@ -451,13 +501,13 @@ export default function ElectionDetail() {
           <div className="flex gap-4 sm:gap-8 border-b border-transparent overflow-x-auto">
             {[
               { key: "overview", label: "Overview" },
+              { key: "analytics", label: "Analytics" },
               { key: "candidates", label: "Candidates" },
               { key: "voters", label: "Voters" },
-              { key: "verification", label: "Voter Verification" },
             ].map(tab => (
               <button
                 key={tab.key}
-                onClick={() => setActiveTab(tab.key as "overview" | "candidates" | "voters" | "verification")}
+                onClick={() => setActiveTab(tab.key as ElectionDetailTab)}
                 className={`pb-4 text-sm font-bold capitalize tracking-wider transition-colors relative ${
                   activeTab === tab.key ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
                 }`}
@@ -492,7 +542,7 @@ export default function ElectionDetail() {
                       <div className="p-3 bg-slate-100 text-slate-700 rounded-xl"><Users size={24}/></div>
                 <div>
                   <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Registered Voters</p>
-                  <p className="text-3xl font-bold font-display">{voters.length}</p>
+                  <p className="text-3xl font-bold font-display">{registeredVoterCount}</p>
                 </div>
               </div>
             </Card>
@@ -501,19 +551,196 @@ export default function ElectionDetail() {
                 <div className="p-3 bg-green-50 text-green-600 rounded-xl"><CheckCheck size={24}/></div>
                 <div>
                   <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Votes Cast</p>
-                  <p className="text-3xl font-bold font-display">{voters.filter(v=>v.has_voted).length}</p>
+                  <p className="text-3xl font-bold font-display">{totalVotesCast}</p>
                 </div>
               </div>
             </Card>
 
-            {!isPending && (
-              <Card className="md:col-span-3 p-6">
+            {isPending && (
+              <div className="md:col-span-3 bg-blue-50 border border-blue-200 rounded-xl p-6 flex items-start gap-4">
+                <AlertCircle className="text-blue-600 shrink-0 mt-1" />
+                <div>
+                  <h4 className="text-blue-900 font-bold text-lg">Setup Phase</h4>
+                  <p className="text-blue-800 mt-1">Add all candidates and voters before scheduled start time. Candidate list will lock automatically when election becomes active.</p>
+                </div>
+              </div>
+            )}
+
+            {isPending && (
+              <Card className="md:col-span-3 p-6 border-primary/20 bg-white">
+                <h4 className="text-lg font-bold mb-1">Automated Election Timing (IST)</h4>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Start and end times are configured during election creation. This election will run automatically.
+                </p>
+                <p className="text-sm text-foreground">
+                  Start: <strong>{scheduledStartIst || "Not scheduled"}</strong>
+                </p>
+                <p className="text-sm text-foreground mt-1">
+                  End: <strong>{scheduledEndIst || "Not scheduled"}</strong>
+                </p>
+              </Card>
+            )}
+          </div>
+        )}
+
+        {/* ANALYTICS TAB */}
+        {activeTab === 'analytics' && (
+          <div className="space-y-6">
+            <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
+              <Card className="p-5">
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Total Vote Cast</p>
+                    <p className="mt-2 text-3xl font-bold font-display">{totalVotesCast}</p>
+                  </div>
+                  <div className="p-3 rounded-xl bg-blue-50 text-blue-600"><Activity size={24} /></div>
+                </div>
+              </Card>
+              <Card className="p-5">
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Turnout</p>
+                    <p className="mt-2 text-3xl font-bold font-display">{turnoutPercentage}%</p>
+                  </div>
+                  <div className="p-3 rounded-xl bg-teal-50 text-teal-600"><Percent size={24} /></div>
+                </div>
+              </Card>
+              <Card className="p-5">
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Registered Voters</p>
+                    <p className="mt-2 text-3xl font-bold font-display">{registeredVoterCount}</p>
+                  </div>
+                  <div className="p-3 rounded-xl bg-slate-100 text-slate-700"><Users size={24} /></div>
+                </div>
+              </Card>
+              <Card className="p-5">
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Leading Candidate</p>
+                    <p className="mt-2 text-xl font-bold font-display truncate max-w-[180px]">
+                      {leadingCandidate && leadingCandidate.votes > 0 ? leadingCandidate.name : "No votes yet"}
+                    </p>
+                  </div>
+                  <div className="p-3 rounded-xl bg-amber-50 text-amber-600"><Trophy size={24} /></div>
+                </div>
+              </Card>
+            </div>
+
+            <div className="grid lg:grid-cols-[minmax(0,1.45fr)_minmax(280px,0.8fr)] gap-6">
+              <Card className="p-6">
+                <div className="flex items-center justify-between gap-4 mb-5">
+                  <div>
+                    <h2 className="text-xl font-bold font-display">Candidate Wise Count</h2>
+                    <p className="text-sm text-muted-foreground mt-1">Live vote totals for each candidate.</p>
+                  </div>
+                  <BarChart3 className="text-primary" size={24} />
+                </div>
+
+                <div className="h-[320px] w-full">
+                  {candidateChartData.length === 0 ? (
+                    <div className="h-full flex items-center justify-center text-sm text-muted-foreground">
+                      No candidates added yet.
+                    </div>
+                  ) : (
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={candidateChartData} margin={{ top: 12, right: 18, left: 0, bottom: 24 }}>
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
+                        <XAxis
+                          dataKey="name"
+                          tick={{ fill: "#64748B", fontSize: 12 }}
+                          tickLine={false}
+                          axisLine={false}
+                          interval={0}
+                        />
+                        <YAxis allowDecimals={false} tick={{ fill: "#64748B", fontSize: 12 }} tickLine={false} axisLine={false} />
+                        <Tooltip formatter={(value) => [Number(value).toLocaleString("en-IN"), "Votes"]} />
+                        <Bar dataKey="votes" radius={[8, 8, 0, 0]}>
+                          {candidateChartData.map(item => (
+                            <Cell key={item.id} fill={item.fill} />
+                          ))}
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  )}
+                </div>
+
+                <div className="mt-4 overflow-x-auto">
+                  <table className="w-full min-w-[520px] text-left text-sm">
+                    <thead className="text-xs uppercase tracking-wide text-muted-foreground">
+                      <tr>
+                        <th className="py-2 pr-4">Candidate</th>
+                        <th className="py-2 px-4">Votes</th>
+                        <th className="py-2 pl-4">Vote Percentage</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-border">
+                      {candidateChartData.length === 0 ? (
+                        <tr><td colSpan={3} className="py-4 text-muted-foreground">No candidate data available.</td></tr>
+                      ) : candidateChartData.map(item => (
+                        <tr key={item.id}>
+                          <td className="py-3 pr-4 font-semibold text-foreground">{item.name}</td>
+                          <td className="py-3 px-4 text-muted-foreground">{item.votes}</td>
+                          <td className="py-3 pl-4 text-muted-foreground">{item.percentage}%</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </Card>
+
+              <Card className="p-6">
+                <h2 className="text-xl font-bold font-display mb-1">Vote Share</h2>
+                <p className="text-sm text-muted-foreground mb-5">Candidate-wise percentage of votes cast.</p>
+
+                <div className="h-[300px] w-full">
+                  {candidateVoteTotal === 0 ? (
+                    <div className="h-full flex items-center justify-center text-sm text-muted-foreground">
+                      No votes recorded yet.
+                    </div>
+                  ) : (
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={candidateChartData.filter(item => item.votes > 0)}
+                          dataKey="votes"
+                          nameKey="name"
+                          innerRadius={62}
+                          outerRadius={100}
+                          paddingAngle={2}
+                        >
+                          {candidateChartData.filter(item => item.votes > 0).map(item => (
+                            <Cell key={item.id} fill={item.fill} />
+                          ))}
+                        </Pie>
+                        <Tooltip formatter={(value, _name, item) => {
+                          const point = (item as any)?.payload
+                          return [`${value} vote(s)`, `${point?.name ?? "Candidate"} (${point?.percentage ?? 0}%)`]
+                        }} />
+                        <Legend verticalAlign="bottom" height={36} />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  )}
+                </div>
+
+                <div className="mt-4 rounded-xl border border-border bg-muted/30 p-4">
+                  <p className="text-sm font-semibold text-foreground">Live Election Statistics</p>
+                  <div className="mt-3 space-y-2 text-sm text-muted-foreground">
+                    <div className="flex justify-between gap-4"><span>Status</span><strong className="text-foreground capitalize">{election.status}</strong></div>
+                    <div className="flex justify-between gap-4"><span>Candidates</span><strong className="text-foreground">{candidates.length}</strong></div>
+                    <div className="flex justify-between gap-4"><span>Votes Pending</span><strong className="text-foreground">{pendingVoteCount}</strong></div>
+                    <div className="flex justify-between gap-4"><span>Candidate Vote Total</span><strong className="text-foreground">{candidateVoteTotal}</strong></div>
+                  </div>
+                </div>
+              </Card>
+            </div>
+
+            <div className="grid lg:grid-cols-[minmax(0,1.45fr)_minmax(280px,0.8fr)] gap-6">
+              <Card className="p-6">
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
                   <div>
-                    <h4 className="text-lg font-bold">Live Voter Turnout Trend</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Number of voters who have voted, shown against your selected timeframe.
-                    </p>
+                    <h2 className="text-xl font-bold font-display">Turnout Graph</h2>
+                    <p className="text-sm text-muted-foreground mt-1">Cumulative vote activity grouped by timeframe.</p>
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {timeframeOptions.map(option => (
@@ -533,14 +760,14 @@ export default function ElectionDetail() {
                   </div>
                 </div>
 
-                <div className="h-[360px] w-full">
+                <div className="h-[340px] w-full">
                   {loadingTrend ? (
                     <div className="h-full w-full flex items-center justify-center text-sm text-muted-foreground">
                       Loading turnout trend...
                     </div>
                   ) : trendChartData.length === 0 ? (
                     <div className="h-full w-full flex items-center justify-center text-sm text-muted-foreground">
-                      No vote data available yet.
+                      No turnout data available yet.
                     </div>
                   ) : (
                     <ResponsiveContainer width="100%" height="100%">
@@ -559,7 +786,6 @@ export default function ElectionDetail() {
                           tick={{ fill: "#64748B", fontSize: 12 }}
                           tickLine={false}
                           axisLine={false}
-                          label={{ value: "Voters Voted", angle: -90, position: "insideLeft", fill: "#64748B" }}
                         />
                         <Tooltip
                           labelFormatter={(value, payload) => {
@@ -590,41 +816,55 @@ export default function ElectionDetail() {
                     </ResponsiveContainer>
                   )}
                 </div>
+              </Card>
 
-                <div className="mt-4 rounded-xl border border-blue-200 bg-blue-50 p-4">
-                  <p className="text-sm font-semibold text-blue-900">Chart Note</p>
-                  <p className="text-sm text-blue-800 mt-1">
-                    Select 10 min, 30 min, 1 hour, or 3 hours to group votes by that interval. The chart line shows cumulative voters voted over time.
-                    {trendGeneratedAt ? ` Last refreshed: ${trendGeneratedAt} IST.` : " Data refreshes automatically every minute."}
-                  </p>
+              <Card className="p-6">
+                <h2 className="text-xl font-bold font-display mb-1">Turnout Split</h2>
+                <p className="text-sm text-muted-foreground mb-5">Voted vs pending voters.</p>
+
+                <div className="h-[250px] w-full">
+                  {registeredVoterCount === 0 ? (
+                    <div className="h-full flex items-center justify-center text-sm text-muted-foreground">
+                      No voters registered yet.
+                    </div>
+                  ) : (
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={participationData}
+                          dataKey="value"
+                          nameKey="name"
+                          innerRadius={58}
+                          outerRadius={92}
+                          paddingAngle={2}
+                        >
+                          {participationData.map(item => (
+                            <Cell key={item.name} fill={item.fill} />
+                          ))}
+                        </Pie>
+                        <Tooltip formatter={(value, name) => [`${value} voter(s)`, String(name)]} />
+                        <Legend verticalAlign="bottom" height={36} />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  )}
+                </div>
+
+                <div className="mt-4 space-y-3 text-sm">
+                  <div className="flex justify-between gap-4 border-b border-border pb-3">
+                    <span className="text-muted-foreground">Start Time</span>
+                    <strong className="text-foreground text-right">{scheduledStartIst || "Not scheduled"}</strong>
+                  </div>
+                  <div className="flex justify-between gap-4 border-b border-border pb-3">
+                    <span className="text-muted-foreground">End Time</span>
+                    <strong className="text-foreground text-right">{scheduledEndIst || "Not scheduled"}</strong>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <span className="text-muted-foreground">Last Refresh</span>
+                    <strong className="text-foreground text-right">{trendGeneratedAt ? `${trendGeneratedAt} IST` : "Every 15-60 sec"}</strong>
+                  </div>
                 </div>
               </Card>
-            )}
-            
-            {isPending && (
-              <div className="md:col-span-3 bg-blue-50 border border-blue-200 rounded-xl p-6 flex items-start gap-4">
-                <AlertCircle className="text-blue-600 shrink-0 mt-1" />
-                <div>
-                  <h4 className="text-blue-900 font-bold text-lg">Setup Phase</h4>
-                  <p className="text-blue-800 mt-1">Add all candidates and voters before scheduled start time. Candidate list will lock automatically when election becomes active.</p>
-                </div>
-              </div>
-            )}
-
-            {isPending && (
-              <Card className="md:col-span-3 p-6 border-primary/20 bg-white">
-                <h4 className="text-lg font-bold mb-1">Automated Election Timing (IST)</h4>
-                <p className="text-sm text-muted-foreground mb-3">
-                  Start and end times are configured during election creation. This election will run automatically.
-                </p>
-                <p className="text-sm text-foreground">
-                  Start: <strong>{scheduledStartIst || "Not scheduled"}</strong>
-                </p>
-                <p className="text-sm text-foreground mt-1">
-                  End: <strong>{scheduledEndIst || "Not scheduled"}</strong>
-                </p>
-              </Card>
-            )}
+            </div>
           </div>
         )}
 
@@ -681,83 +921,6 @@ export default function ElectionDetail() {
           </div>
         )}
 
-        {/* VERIFICATION TAB */}
-        {activeTab === 'verification' && (
-          <div>
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold font-display">Voter Profile Verification</h2>
-              <div className="text-sm text-muted-foreground">
-                Verified: <strong className="text-foreground">{verifiedProfileVoters.length}</strong>
-                {" "} / {" "}
-                Total: <strong className="text-foreground">{voters.length}</strong>
-              </div>
-            </div>
-
-            <div className="mb-5 rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-800 flex items-start gap-2">
-              <BadgeCheck size={16} className="mt-0.5 shrink-0" />
-              <span>
-                Profile verification is based on voter profile completion (photo, signature, and required details) before election start.
-              </span>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-6">
-              <Card className="p-5">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-bold text-green-700">Verified Profiles</h3>
-                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-green-100 text-green-700">
-                    {verifiedProfileVoters.length}
-                  </span>
-                </div>
-
-                {verifiedProfileVoters.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">No verified voter profiles yet.</p>
-                ) : (
-                  <div className="space-y-3 max-h-[420px] overflow-auto pr-1">
-                    {verifiedProfileVoters.map(voter => (
-                      <div key={voter.id} className="rounded-xl border border-green-200 bg-green-50/70 p-3">
-                        <p className="font-semibold text-foreground">{voter.name}</p>
-                        <p className="text-sm text-muted-foreground">{voter.email}</p>
-                        <p className="text-xs mt-1">
-                          <span className="inline-flex px-2.5 py-1 rounded-full font-semibold bg-green-100 text-green-700">
-                            Profile Verified
-                          </span>
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </Card>
-
-              <Card className="p-5">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-bold text-amber-700">Unverified Profiles</h3>
-                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-100 text-amber-700">
-                    {unverifiedProfileVoters.length}
-                  </span>
-                </div>
-
-                {unverifiedProfileVoters.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">All voter profiles are verified.</p>
-                ) : (
-                  <div className="space-y-3 max-h-[420px] overflow-auto pr-1">
-                    {unverifiedProfileVoters.map(voter => (
-                      <div key={voter.id} className="rounded-xl border border-amber-200 bg-amber-50/70 p-3">
-                        <p className="font-semibold text-foreground">{voter.name}</p>
-                        <p className="text-sm text-muted-foreground">{voter.email}</p>
-                        <p className="text-xs mt-1">
-                          <span className="inline-flex px-2.5 py-1 rounded-full font-semibold bg-amber-100 text-amber-700">
-                            Profile Pending
-                          </span>
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </Card>
-            </div>
-          </div>
-        )}
-
         {/* VOTERS TAB */}
         {activeTab === 'voters' && (
           <div>
@@ -772,25 +935,36 @@ export default function ElectionDetail() {
 
             <div className="bg-white rounded-xl border border-border overflow-hidden shadow-sm">
               <div className="overflow-x-auto">
-                <table className="w-full text-left">
+                <table className="w-full min-w-[1280px] text-left">
                   <thead className="bg-muted/50 text-muted-foreground text-xs uppercase font-bold tracking-wider">
                     <tr>
                       <th className="px-6 py-4">Name</th>
+                      <th className="px-6 py-4">Voter ID</th>
+                      <th className="px-6 py-4">Aadhar ID</th>
                       <th className="px-6 py-4">Email</th>
+                      <th className="px-6 py-4">Mobile</th>
+                      <th className="px-6 py-4">Age</th>
+                      <th className="px-6 py-4">Gender</th>
                       <th className="px-6 py-4">Photo</th>
                       <th className="px-6 py-4">Signature</th>
                       <th className="px-6 py-4">Status</th>
+                      <th className="px-6 py-4">Registered</th>
                       {isPending && <th className="px-6 py-4 text-right">Actions</th>}
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border">
                     {voters.length === 0 && (
-                      <tr><td colSpan={isPending ? 6 : 5} className="px-6 py-8 text-center text-muted-foreground">No voters registered.</td></tr>
+                      <tr><td colSpan={isPending ? 12 : 11} className="px-6 py-8 text-center text-muted-foreground">No voters registered.</td></tr>
                     )}
                     {voters.map(v => (
                       <tr key={v.id} className="hover:bg-muted/30 transition-colors">
-                        <td className="px-6 py-4 font-semibold text-foreground">{v.name}</td>
-                        <td className="px-6 py-4 text-muted-foreground">{v.email}</td>
+                        <td className="px-6 py-4 font-semibold text-foreground whitespace-nowrap">{v.name}</td>
+                        <td className="px-6 py-4 text-muted-foreground font-mono text-xs whitespace-nowrap">{(v as any).voter_id || "Not provided"}</td>
+                        <td className="px-6 py-4 text-muted-foreground font-mono text-xs whitespace-nowrap">{(v as any).aadhar_id || "Not provided"}</td>
+                        <td className="px-6 py-4 text-muted-foreground max-w-[240px] break-all">{v.email}</td>
+                        <td className="px-6 py-4 text-muted-foreground whitespace-nowrap">{(v as any).mobile || "Not provided"}</td>
+                        <td className="px-6 py-4 text-muted-foreground whitespace-nowrap">{(v as any).age ?? "Not provided"}</td>
+                        <td className="px-6 py-4 text-muted-foreground capitalize whitespace-nowrap">{(v as any).gender || "Not provided"}</td>
                         <td className="px-6 py-4">
                           {sanitizeImageSource((v as any).photo_url) ? (
                             <img
@@ -818,6 +992,11 @@ export default function ElectionDetail() {
                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Voted</span> : 
                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800">Pending</span>
                           }
+                        </td>
+                        <td className="px-6 py-4 text-muted-foreground whitespace-nowrap">
+                          {(v as any).created_at
+                            ? new Date((v as any).created_at).toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata" })
+                            : "Not available"}
                         </td>
                         {isPending && (
                           <td className="px-6 py-4 text-right">
@@ -891,7 +1070,7 @@ export default function ElectionDetail() {
 
         <div className="mb-3 p-3 bg-muted/40 border border-border text-sm rounded-lg">
           <p className="font-semibold mb-1">Bulk import from CSV</p>
-          <p className="text-muted-foreground">Required headers: <code>name,voter_id,mobile,email_id,age,gender</code></p>
+          <p className="text-muted-foreground">Required headers: <code>name,voter_id,aadhar_id,mobile,email_id,age,gender</code></p>
         </div>
 
         <form onSubmit={handleImportVotersCsv} className="space-y-4">

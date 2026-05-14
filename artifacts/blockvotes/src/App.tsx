@@ -12,8 +12,6 @@ import CompanyRegister from "@/pages/company-register"
 import Dashboard from "@/pages/dashboard"
 import ElectionDetail from "@/pages/election-detail"
 import VoterLogin from "@/pages/voter-login"
-import VoterProfile from "@/pages/voter-profile"
-import VoterPassword from "@/pages/voter-password"
 import Voting from "@/pages/voting"
 import Results from "@/pages/results"
 import NotFound from "@/pages/not-found"
@@ -41,8 +39,6 @@ function Router() {
           <Route path="/election/:id" component={ElectionDetail} />
           
           <Route path="/voter/login" component={VoterLogin} />
-          <Route path="/voter/profile" component={VoterProfile} />
-          <Route path="/voter/password" component={VoterPassword} />
           <Route path="/vote" component={Voting} />
           <Route path="/results/:electionId" component={Results} />
           

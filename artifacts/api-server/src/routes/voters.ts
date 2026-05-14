@@ -20,7 +20,7 @@ import { hashPassword, isLegacyPasswordHash, verifyPassword } from "../lib/passw
 import { attachVoterSessionCookie } from "../lib/voter-auth";
 
 const router: IRouter = Router();
-const requiredCsvHeaders = ["name", "voter_id", "mobile", "email_id", "age", "gender"] as const;
+const requiredCsvHeaders = ["name", "voter_id", "aadhar_id", "mobile", "email_id", "age", "gender"] as const;
 const LOGIN_OTP_VALIDITY_MS = 10 * 60 * 1000;
 const LOGIN_OTP_MAX_ATTEMPTS = 5;
 const LOGIN_INITIATE_MAX_ATTEMPTS = 5;
@@ -39,6 +39,7 @@ type RegisterVoterInput = {
   email: string;
   name: string;
   voterId?: string | null;
+  aadharId?: string | null;
   mobile?: string | null;
   photoUrl?: string | null;
   signatureUrl?: string | null;
@@ -83,6 +84,7 @@ type CsvPreparedVoter = {
   name: string;
   emailId: string;
   voterId: string;
+  aadharId: string;
   mobile: string;
   age: number;
   gender: string;
@@ -130,6 +132,10 @@ function normalizeVoterId(value: string): string {
   return value.trim().toLowerCase();
 }
 
+function normalizeAadharId(value: string): string {
+  return value.replace(/\D/g, "");
+}
+
 function normalizeGender(value: string): string {
   return value.trim().toLowerCase();
 }
@@ -143,6 +149,10 @@ function isValidEmail(value: string): boolean {
 function isValidMobile(value: string): boolean {
   const digits = value.replace(/\D/g, "");
   return digits.length >= 10 && digits.length <= 15;
+}
+
+function isValidAadharId(value: string): boolean {
+  return /^\d{12}$/.test(normalizeAadharId(value));
 }
 
 function isValidImageLikeValue(value: string): boolean {
@@ -517,6 +527,7 @@ async function validateCsvRowsForElection(
     .select({
       email: votersTable.email,
       voterId: votersTable.voterId,
+      aadharId: votersTable.aadharId,
     })
     .from(votersTable)
     .where(eq(votersTable.electionId, electionId));
@@ -531,9 +542,15 @@ async function validateCsvRowsForElection(
       .map(voter => (voter.voterId ? normalizeVoterId(voter.voterId) : ""))
       .filter(voterId => voterId.length > 0),
   );
+  const existingAadharIds = new Set(
+    existingVoters
+      .map(voter => (voter.aadharId ? normalizeAadharId(voter.aadharId) : ""))
+      .filter(aadharId => aadharId.length > 0),
+  );
 
   const seenEmailsInCsv = new Map<string, number>();
   const seenVoterIdsInCsv = new Map<string, number>();
+  const seenAadharIdsInCsv = new Map<string, number>();
 
   const summary: CsvValidationSummary = {
     total: 0,
@@ -554,6 +571,7 @@ async function validateCsvRowsForElection(
 
     const name = readRowCell(row, headerMap, "name");
     const voterId = readRowCell(row, headerMap, "voter_id");
+    const aadharId = readRowCell(row, headerMap, "aadhar_id");
     const mobile = readRowCell(row, headerMap, "mobile");
     const emailId = readRowCell(row, headerMap, "email_id");
     const ageRaw = readRowCell(row, headerMap, "age");
@@ -562,6 +580,7 @@ async function validateCsvRowsForElection(
     const missingValues: string[] = [];
     if (!name) missingValues.push("name");
     if (!voterId) missingValues.push("voter_id");
+    if (!aadharId) missingValues.push("aadhar_id");
     if (!mobile) missingValues.push("mobile");
     if (!emailId) missingValues.push("email_id");
     if (!ageRaw) missingValues.push("age");
@@ -601,6 +620,19 @@ async function validateCsvRowsForElection(
         name,
         email_id: emailId,
         message: "Invalid voter_id value",
+      });
+      continue;
+    }
+
+    const normalizedAadharId = normalizeAadharId(aadharId);
+    if (!isValidAadharId(aadharId)) {
+      summary.invalid += 1;
+      summary.rows.push({
+        row: rowNumber,
+        status: "error",
+        name,
+        email_id: emailId,
+        message: "Invalid aadhar_id value. Use exactly 12 digits.",
       });
       continue;
     }
@@ -680,6 +712,18 @@ async function validateCsvRowsForElection(
       continue;
     }
 
+    if (existingAadharIds.has(normalizedAadharId)) {
+      summary.invalid += 1;
+      summary.rows.push({
+        row: rowNumber,
+        status: "error",
+        name,
+        email_id: emailId,
+        message: "Voter already exists for this election (aadhar_id)",
+      });
+      continue;
+    }
+
     if (seenVoterIdsInCsv.has(normalizedVoterId)) {
       const duplicateOf = seenVoterIdsInCsv.get(normalizedVoterId);
       summary.invalid += 1;
@@ -693,14 +737,29 @@ async function validateCsvRowsForElection(
       continue;
     }
 
+    if (seenAadharIdsInCsv.has(normalizedAadharId)) {
+      const duplicateOf = seenAadharIdsInCsv.get(normalizedAadharId);
+      summary.invalid += 1;
+      summary.rows.push({
+        row: rowNumber,
+        status: "error",
+        name,
+        email_id: emailId,
+        message: `Duplicate aadhar_id in CSV (already used at row ${duplicateOf})`,
+      });
+      continue;
+    }
+
     seenEmailsInCsv.set(normalizedEmail, rowNumber);
     seenVoterIdsInCsv.set(normalizedVoterId, rowNumber);
+    seenAadharIdsInCsv.set(normalizedAadharId, rowNumber);
     summary.valid += 1;
     summary.prepared.push({
       row: rowNumber,
       name: name.trim(),
       emailId: normalizedEmail,
       voterId: voterId.trim(),
+      aadharId: normalizedAadharId,
       mobile: mobile.trim(),
       age,
       gender: normalizedGender,
@@ -735,6 +794,12 @@ async function getElectionById(electionId: string): Promise<{
 }
 
 async function registerVoter(input: RegisterVoterInput): Promise<RegisterVoterResult> {
+  const safeVoterId = input.voterId?.trim() || null;
+  const safeAadharId = input.aadharId ? normalizeAadharId(input.aadharId) : null;
+  if (input.aadharId && !isValidAadharId(input.aadharId)) {
+    return { status: "error", message: "Invalid aadhar_id value. Use exactly 12 digits." };
+  }
+
   const existing = await db
     .select()
     .from(votersTable)
@@ -742,6 +807,26 @@ async function registerVoter(input: RegisterVoterInput): Promise<RegisterVoterRe
 
   if (existing.length > 0) {
     return { status: "error", message: "Voter already registered for this election" };
+  }
+
+  if (safeVoterId) {
+    const existingByVoterId = await db
+      .select()
+      .from(votersTable)
+      .where(and(eq(votersTable.electionId, input.electionId), eq(votersTable.voterId, safeVoterId)));
+    if (existingByVoterId.length > 0) {
+      return { status: "error", message: "Voter ID already registered for this election" };
+    }
+  }
+
+  if (safeAadharId) {
+    const existingByAadharId = await db
+      .select()
+      .from(votersTable)
+      .where(and(eq(votersTable.electionId, input.electionId), eq(votersTable.aadharId, safeAadharId)));
+    if (existingByAadharId.length > 0) {
+      return { status: "error", message: "Aadhar ID already registered for this election" };
+    }
   }
 
   const id = randomUUID();
@@ -756,7 +841,8 @@ async function registerVoter(input: RegisterVoterInput): Promise<RegisterVoterRe
     name: input.name,
     password: hashedPassword,
     hasVoted: false,
-    voterId: input.voterId ?? null,
+    voterId: safeVoterId,
+    aadharId: safeAadharId,
     mobile: input.mobile ?? null,
     photoUrl: input.photoUrl ?? null,
     signatureUrl: input.signatureUrl ?? null,
@@ -1010,6 +1096,7 @@ router.get("/", requireAdminAuth, async (req, res) => {
       email_id: v.email,
       name: v.name,
       voter_id: v.voterId,
+      aadhar_id: v.aadharId,
       mobile: v.mobile,
       photo_url: v.photoUrl,
       signature_url: v.signatureUrl,
@@ -1018,6 +1105,7 @@ router.get("/", requireAdminAuth, async (req, res) => {
       age: v.age,
       gender: v.gender,
       has_voted: v.hasVoted,
+      created_at: v.createdAt,
     }));
     res.json({ status: "success", message: "Voters fetched", data: mapped });
   } catch (err) {
@@ -1028,7 +1116,7 @@ router.get("/", requireAdminAuth, async (req, res) => {
 
 router.post("/", requireAdminAuth, async (req, res) => {
   try {
-    const { election_id, email, name, voter_id, mobile, photo_url, signature_url, age, gender } = req.body;
+    const { election_id, email, name, voter_id, aadhar_id, mobile, photo_url, signature_url, age, gender } = req.body;
 
     if (!election_id || !email || !name) {
       res.json({ status: "error", message: "election_id, email, and name are required" });
@@ -1056,6 +1144,7 @@ router.post("/", requireAdminAuth, async (req, res) => {
       email: normalizeEmail(email),
       name,
       voterId: normalizeOptionalText(voter_id),
+      aadharId: normalizeOptionalText(aadhar_id),
       mobile: normalizeOptionalText(mobile),
       photoUrl: normalizeOptionalText(photo_url),
       signatureUrl: normalizeOptionalText(signature_url),
@@ -1219,6 +1308,7 @@ router.post("/import", requireAdminAuth, async (req, res) => {
         email: preparedRow.emailId,
         name: preparedRow.name,
         voterId: preparedRow.voterId,
+        aadharId: preparedRow.aadharId,
         mobile: preparedRow.mobile,
         age: preparedRow.age,
         gender: preparedRow.gender,
@@ -1371,6 +1461,7 @@ router.post("/profile", async (req, res) => {
         election_id: voter.electionId,
         election_status: elections[0]?.status,
         voter_id: voter.voterId,
+        aadhar_id: voter.aadharId,
         email: voter.email,
         name: voter.name,
         mobile: voter.mobile,
@@ -1538,6 +1629,7 @@ router.post("/profile/update", async (req, res) => {
         id: voter.id,
         election_id: voter.electionId,
         voter_id: voter.voterId,
+        aadhar_id: voter.aadharId,
         email: voter.email,
         name: safeName,
         mobile: safeMobile,
@@ -1915,6 +2007,7 @@ router.post("/login/verify", async (req, res) => {
         name: voter.name,
         email: voter.email,
         voter_id: voter.voterId,
+        aadhar_id: voter.aadharId,
         mobile: voter.mobile,
         age: voter.age,
         gender: voter.gender,

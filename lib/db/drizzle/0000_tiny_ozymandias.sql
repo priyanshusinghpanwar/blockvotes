@@ -62,6 +62,7 @@ CREATE TABLE "voters" (
 	"id" text PRIMARY KEY NOT NULL,
 	"election_id" text NOT NULL,
 	"voter_id" text,
+	"aadhar_id" text,
 	"mobile" text,
 	"email" text NOT NULL,
 	"name" text NOT NULL,
@@ -106,6 +107,7 @@ CREATE INDEX "voters_election_id_idx" ON "voters" USING btree ("election_id");--
 CREATE INDEX "voters_election_has_voted_idx" ON "voters" USING btree ("election_id","has_voted");--> statement-breakpoint
 CREATE UNIQUE INDEX "voters_election_email_uidx" ON "voters" USING btree ("election_id","email");--> statement-breakpoint
 CREATE UNIQUE INDEX "voters_election_voter_id_uidx" ON "voters" USING btree ("election_id","voter_id");--> statement-breakpoint
+CREATE UNIQUE INDEX "voters_election_aadhar_id_uidx" ON "voters" USING btree ("election_id","aadhar_id");--> statement-breakpoint
 CREATE INDEX "votes_election_id_idx" ON "votes" USING btree ("election_id");--> statement-breakpoint
 CREATE INDEX "votes_candidate_id_idx" ON "votes" USING btree ("candidate_id");--> statement-breakpoint
 CREATE INDEX "votes_created_at_idx" ON "votes" USING btree ("created_at");--> statement-breakpoint

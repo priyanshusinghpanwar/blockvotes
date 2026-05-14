@@ -49,9 +49,6 @@ router.post("/", requireVoterAuth, async (req, res) => {
       if (voter.hasVoted) {
         throw new Error("ALREADY_VOTED");
       }
-      if (!voter.profileCompleted) {
-        throw new Error("PROFILE_INCOMPLETE");
-      }
 
       const electionResults = await tx
         .select()
@@ -122,7 +119,6 @@ router.post("/", requireVoterAuth, async (req, res) => {
       const knownErrors: Record<string, string> = {
         VOTER_NOT_FOUND: "Voter not found",
         ALREADY_VOTED: "You have already voted in this election",
-        PROFILE_INCOMPLETE: "Complete voter profile verification before casting your vote",
         ELECTION_NOT_ACTIVE: "Election is not active",
         INVALID_CANDIDATE: "Candidate is invalid for this election",
       };

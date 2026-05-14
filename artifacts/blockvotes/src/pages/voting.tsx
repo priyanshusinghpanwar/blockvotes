@@ -22,12 +22,12 @@ export default function Voting() {
   const electionId = voter?.election_id || ""
 
   const { data: electionRes, isLoading: loadingE } = useGetElection(electionId, {
-    query: { queryKey: [`/api/elections/${electionId}`], enabled: !!electionId && Boolean(voter?.profile_completed) }
+    query: { queryKey: [`/api/elections/${electionId}`], enabled: !!electionId }
   })
   
   const { data: candidatesRes, isLoading: loadingC } = useListCandidates(
     { election_id: electionId }, 
-    { query: { queryKey: ["/api/candidates", { election_id: electionId }], enabled: !!electionId && Boolean(voter?.profile_completed) } }
+    { query: { queryKey: ["/api/candidates", { election_id: electionId }], enabled: !!electionId } }
   )
 
   const election = electionRes?.data
@@ -39,17 +39,9 @@ export default function Voting() {
       return
     }
 
-    if (!voter.profile_completed) {
-      toast({
-        variant: "destructive",
-        title: "Complete profile first",
-        description: "Upload photo/signature and verify profile before voting.",
-      })
-      setLocation("/voter/profile")
-    }
   }, [setLocation, toast, voter])
 
-  if (!voter || !voter.profile_completed) return null
+  if (!voter) return null
 
   if (voter.has_voted) {
     return (
@@ -132,8 +124,8 @@ export default function Voting() {
               Voting will open automatically at the scheduled start time. Please wait and try again once the election becomes active.
             </p>
             <div className="mt-8 flex justify-center">
-              <Button size="lg" onClick={() => setLocation("/voter/profile")} className="min-w-52">
-                Go to Update Profile
+              <Button size="lg" onClick={() => setLocation("/")} className="min-w-52">
+                Back to Home
               </Button>
             </div>
           </Card>

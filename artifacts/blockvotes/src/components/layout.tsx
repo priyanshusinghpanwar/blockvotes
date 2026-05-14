@@ -48,8 +48,8 @@ export function Navbar() {
               </>
             )}
             {voter && !isAuthPage && (
-              <Link href="/voter/profile" className="text-sm font-semibold text-primary hover:text-accent transition-colors hidden md:block">
-                Voter Profile
+              <Link href="/vote" className="text-sm font-semibold text-primary hover:text-accent transition-colors hidden md:block">
+                Vote
               </Link>
             )}
             

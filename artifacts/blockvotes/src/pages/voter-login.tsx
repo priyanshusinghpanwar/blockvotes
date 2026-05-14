@@ -80,20 +80,9 @@ export default function VoterLogin() {
   const [isSendingOtp, setIsSendingOtp] = useState(false)
   const [isVerifyingOtp, setIsVerifyingOtp] = useState(false)
 
-  const [location, setLocation] = useLocation()
+  const [, setLocation] = useLocation()
   const { setVoter } = useAuth()
   const { toast } = useToast()
-  const loginMode = useMemo<"vote" | "profile">(() => {
-    if (typeof window !== "undefined") {
-      const modeFromSearch = new URLSearchParams(window.location.search).get("mode")
-      if (modeFromSearch === "profile" || modeFromSearch === "vote") {
-        return modeFromSearch
-      }
-    }
-    const query = location.includes("?") ? location.slice(location.indexOf("?")) : ""
-    const mode = new URLSearchParams(query).get("mode")
-    return mode === "profile" ? "profile" : "vote"
-  }, [location])
 
   const otpExpired = secondsLeft <= 0
   const otpExpiresText = useMemo(() => formatRemainingTime(secondsLeft), [secondsLeft])
@@ -207,10 +196,6 @@ export default function VoterLogin() {
         description: `Welcome, ${result.data.name}`,
       })
 
-      if (loginMode === "profile") {
-        setLocation("/voter/profile")
-        return
-      }
       setLocation("/vote")
     } catch (err: any) {
       toast({
