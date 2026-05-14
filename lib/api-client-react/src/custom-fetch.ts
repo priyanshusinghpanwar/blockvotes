@@ -75,6 +75,14 @@ function resolveUrl(input: RequestInfo | URL): string {
   return input.url;
 }
 
+function isNgrokUrl(url: string): boolean {
+  try {
+    return /\.ngrok(-free)?\.dev$/i.test(new URL(url).hostname);
+  } catch {
+    return false;
+  }
+}
+
 function mergeHeaders(...sources: Array<HeadersInit | undefined>): Headers {
   const headers = new Headers();
 
@@ -356,6 +364,10 @@ export async function customFetch<T = unknown>(
   }
 
   const requestInfo = { method, url: resolveUrl(input) };
+
+  if (isNgrokUrl(requestInfo.url) && !headers.has("ngrok-skip-browser-warning")) {
+    headers.set("ngrok-skip-browser-warning", "true");
+  }
 
   const response = await fetch(input, {
     credentials: "include",
