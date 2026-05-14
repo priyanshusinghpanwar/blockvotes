@@ -31,9 +31,9 @@ export default function Dashboard() {
     if (!company) setLocation("/company/login")
   }, [company, setLocation])
 
-  const { data: electionsResponse, isLoading } = useListElections({ company_id: companyId }, {
+  const { data: electionsResponse, isLoading } = useListElections({}, {
     query: {
-      queryKey: ["/api/elections", { company_id: companyId }],
+      queryKey: ["/api/elections", companyId],
       enabled: !!companyId
     }
   })

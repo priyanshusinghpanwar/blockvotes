@@ -193,7 +193,7 @@ export interface CastVoteInput {
 }
 
 export type ListElectionsParams = {
-  company_id: string;
+  company_id?: string;
 };
 
 export type ListCandidatesParams = {
