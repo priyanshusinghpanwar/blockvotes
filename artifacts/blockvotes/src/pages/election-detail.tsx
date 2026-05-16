@@ -224,6 +224,16 @@ export default function ElectionDetail() {
   const turnoutPercentage = registeredVoterCount > 0
     ? Number(((totalVotesCast / registeredVoterCount) * 100).toFixed(1))
     : 0
+  const maleVoters = voters.filter(voter => ((voter as any).gender || "").toString().trim().toLowerCase() === "male")
+  const femaleVoters = voters.filter(voter => ((voter as any).gender || "").toString().trim().toLowerCase() === "female")
+  const maleVotesCast = maleVoters.filter(voter => voter.has_voted).length
+  const femaleVotesCast = femaleVoters.filter(voter => voter.has_voted).length
+  const maleTurnoutPercentage = maleVoters.length > 0
+    ? Number(((maleVotesCast / maleVoters.length) * 100).toFixed(1))
+    : 0
+  const femaleTurnoutPercentage = femaleVoters.length > 0
+    ? Number(((femaleVotesCast / femaleVoters.length) * 100).toFixed(1))
+    : 0
   const candidateVoteTotal = candidates.reduce((sum, candidate) => sum + Number((candidate as any).votes ?? 0), 0)
   const candidateChartData = candidates.map((candidate, index) => {
     const votes = Number((candidate as any).votes ?? 0)
@@ -587,7 +597,7 @@ export default function ElectionDetail() {
         {/* ANALYTICS TAB */}
         {activeTab === 'analytics' && (
           <div className="space-y-6">
-            <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
+            <div className="grid sm:grid-cols-2 xl:grid-cols-6 gap-4">
               <Card className="p-5">
                 <div className="flex items-center justify-between gap-4">
                   <div>
@@ -613,6 +623,26 @@ export default function ElectionDetail() {
                     <p className="mt-2 text-3xl font-bold font-display">{registeredVoterCount}</p>
                   </div>
                   <div className="p-3 rounded-xl bg-slate-100 text-slate-700"><Users size={24} /></div>
+                </div>
+              </Card>
+              <Card className="p-5">
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Male Turnout</p>
+                    <p className="mt-2 text-3xl font-bold font-display">{maleTurnoutPercentage}%</p>
+                    <p className="mt-1 text-xs text-muted-foreground">{maleVotesCast} of {maleVoters.length} voted</p>
+                  </div>
+                  <div className="p-3 rounded-xl bg-sky-50 text-sky-600"><Users size={24} /></div>
+                </div>
+              </Card>
+              <Card className="p-5">
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Female Turnout</p>
+                    <p className="mt-2 text-3xl font-bold font-display">{femaleTurnoutPercentage}%</p>
+                    <p className="mt-1 text-xs text-muted-foreground">{femaleVotesCast} of {femaleVoters.length} voted</p>
+                  </div>
+                  <div className="p-3 rounded-xl bg-rose-50 text-rose-600"><Users size={24} /></div>
                 </div>
               </Card>
               <Card className="p-5">
@@ -936,13 +966,11 @@ export default function ElectionDetail() {
 
             <div className="bg-white rounded-xl border border-border overflow-hidden shadow-sm">
               <div className="overflow-x-auto">
-                <table className="w-full min-w-[1280px] text-left">
+                <table className="w-full min-w-[1040px] text-left">
                   <thead className="bg-muted/50 text-muted-foreground text-xs uppercase font-bold tracking-wider">
                     <tr>
                       <th className="px-6 py-4">Name</th>
                       <th className="px-6 py-4">Voter ID</th>
-                      <th className="px-6 py-4">Aadhar ID</th>
-                      <th className="px-6 py-4">Email</th>
                       <th className="px-6 py-4">Mobile</th>
                       <th className="px-6 py-4">Age</th>
                       <th className="px-6 py-4">Gender</th>
@@ -955,14 +983,12 @@ export default function ElectionDetail() {
                   </thead>
                   <tbody className="divide-y divide-border">
                     {voters.length === 0 && (
-                      <tr><td colSpan={isPending ? 12 : 11} className="px-6 py-8 text-center text-muted-foreground">No voters registered.</td></tr>
+                      <tr><td colSpan={isPending ? 10 : 9} className="px-6 py-8 text-center text-muted-foreground">No voters registered.</td></tr>
                     )}
                     {voters.map(v => (
                       <tr key={v.id} className="hover:bg-muted/30 transition-colors">
                         <td className="px-6 py-4 font-semibold text-foreground whitespace-nowrap">{v.name}</td>
                         <td className="px-6 py-4 text-muted-foreground font-mono text-xs whitespace-nowrap">{(v as any).voter_id || "Not provided"}</td>
-                        <td className="px-6 py-4 text-muted-foreground font-mono text-xs whitespace-nowrap">{(v as any).aadhar_id || "Not provided"}</td>
-                        <td className="px-6 py-4 text-muted-foreground max-w-[240px] break-all">{v.email}</td>
                         <td className="px-6 py-4 text-muted-foreground whitespace-nowrap">{(v as any).mobile || "Not provided"}</td>
                         <td className="px-6 py-4 text-muted-foreground whitespace-nowrap">{(v as any).age ?? "Not provided"}</td>
                         <td className="px-6 py-4 text-muted-foreground capitalize whitespace-nowrap">{(v as any).gender || "Not provided"}</td>

@@ -17,3 +17,1376 @@
       "statusCode": 200
     }
     [35mresponseTime[39m: 18
+[08:44:30.252] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 2,
+      "method": "OPTIONS",
+      "url": "/api/company/login"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 3
+[08:44:31.230] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 3,
+      "method": "POST",
+      "url": "/api/company/login"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 604
+[08:44:31.428] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 4,
+      "method": "OPTIONS",
+      "url": "/api/elections"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:44:31.658] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 5,
+      "method": "GET",
+      "url": "/api/elections"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 25
+[08:44:58.094] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 6,
+      "method": "OPTIONS",
+      "url": "/api/elections"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 2
+[08:44:58.400] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 7,
+      "method": "POST",
+      "url": "/api/elections"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 78
+[08:44:58.566] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 8,
+      "method": "GET",
+      "url": "/api/elections"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 6
+[08:45:01.986] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 9,
+      "method": "OPTIONS",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 0
+[08:45:02.063] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 10,
+      "method": "OPTIONS",
+      "url": "/api/elections/aiml7/hourly-trend"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:45:02.064] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 11,
+      "method": "OPTIONS",
+      "url": "/api/voters"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:45:02.065] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 12,
+      "method": "OPTIONS",
+      "url": "/api/elections/aiml7"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:45:02.895] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 13,
+      "method": "GET",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 189
+[08:45:02.940] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 14,
+      "method": "GET",
+      "url": "/api/elections/aiml7/hourly-trend"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 230
+[08:45:03.137] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 15,
+      "method": "GET",
+      "url": "/api/elections/aiml7"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 8
+[08:45:03.151] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 16,
+      "method": "GET",
+      "url": "/api/voters"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 20
+[08:45:12.204] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 17,
+      "method": "OPTIONS",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:45:13.778] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 18,
+      "method": "POST",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1366
+[08:45:13.941] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 19,
+      "method": "OPTIONS",
+      "url": "/api/elections/aiml7"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 0
+[08:45:14.029] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 20,
+      "method": "OPTIONS",
+      "url": "/api/voters"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 0
+[08:45:14.031] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 21,
+      "method": "OPTIONS",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:45:14.109] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 22,
+      "method": "GET",
+      "url": "/api/elections/aiml7"
+    }
+    [35mres[39m: {
+      "statusCode": 304
+    }
+    [35mresponseTime[39m: 9
+[08:45:14.262] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 23,
+      "method": "GET",
+      "url": "/api/voters"
+    }
+    [35mres[39m: {
+      "statusCode": 304
+    }
+    [35mresponseTime[39m: 8
+[08:45:14.270] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 24,
+      "method": "GET",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 6
+[08:45:18.397] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 25,
+      "method": "OPTIONS",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:45:19.875] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 26,
+      "method": "POST",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1330
+[08:45:20.043] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 27,
+      "method": "OPTIONS",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:45:20.132] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 28,
+      "method": "OPTIONS",
+      "url": "/api/elections/aiml7"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 0
+[08:45:20.135] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 29,
+      "method": "OPTIONS",
+      "url": "/api/voters"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:45:20.200] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 30,
+      "method": "GET",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 5
+[08:45:20.350] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 31,
+      "method": "GET",
+      "url": "/api/voters"
+    }
+    [35mres[39m: {
+      "statusCode": 304
+    }
+    [35mresponseTime[39m: 8
+[08:45:20.514] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 32,
+      "method": "GET",
+      "url": "/api/elections/aiml7"
+    }
+    [35mres[39m: {
+      "statusCode": 304
+    }
+    [35mresponseTime[39m: 169
+[08:45:28.250] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 33,
+      "method": "OPTIONS",
+      "url": "/api/voters/import/preview"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 0
+[08:45:28.457] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 34,
+      "method": "POST",
+      "url": "/api/voters/import/preview"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 47
+[08:45:31.663] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 35,
+      "method": "OPTIONS",
+      "url": "/api/voters/import"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:45:56.969] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 36,
+      "method": "POST",
+      "url": "/api/voters/import"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 25148
+[08:45:57.138] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 37,
+      "method": "OPTIONS",
+      "url": "/api/elections/aiml7"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:45:57.162] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 38,
+      "method": "OPTIONS",
+      "url": "/api/voters"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 0
+[08:45:57.164] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 39,
+      "method": "OPTIONS",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:45:57.275] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 40,
+      "method": "GET",
+      "url": "/api/elections/aiml7"
+    }
+    [35mres[39m: {
+      "statusCode": 304
+    }
+    [35mresponseTime[39m: 4
+[08:45:57.349] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 41,
+      "method": "GET",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 304
+    }
+    [35mresponseTime[39m: 12
+[08:45:57.458] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 42,
+      "method": "GET",
+      "url": "/api/voters"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 120
+[08:46:02.921] [32mINFO[39m (13888): [36mElection automation cycle executed[39m
+    [35mstarted[39m: 1
+    [35mended[39m: 0
+[08:47:54.952] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 43,
+      "method": "OPTIONS",
+      "url": "/api/elections"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 0
+[08:47:55.186] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 44,
+      "method": "GET",
+      "url": "/api/elections"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 4
+[08:47:59.449] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 45,
+      "method": "OPTIONS",
+      "url": "/api/company/logout"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:47:59.606] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 46,
+      "method": "POST",
+      "url": "/api/company/logout"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 2
+[08:48:10.989] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 47,
+      "method": "OPTIONS",
+      "url": "/api/voters/credential-info"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 0
+[08:48:11.177] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 48,
+      "method": "POST",
+      "url": "/api/voters/credential-info"
+    }
+    [35mres[39m: {
+      "statusCode": 401
+    }
+    [35mresponseTime[39m: 2
+[08:48:28.167] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 49,
+      "method": "OPTIONS",
+      "url": "/api/voters/login/initiate"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 0
+[08:48:31.094] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 50,
+      "method": "POST",
+      "url": "/api/voters/login/initiate"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 2743
+[08:48:49.148] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 51,
+      "method": "OPTIONS",
+      "url": "/api/voters/login/verify"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:48:50.226] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 52,
+      "method": "POST",
+      "url": "/api/voters/login/verify"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 789
+[08:48:50.382] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 53,
+      "method": "OPTIONS",
+      "url": "/api/elections/aiml7"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 0
+[08:48:50.423] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 54,
+      "method": "OPTIONS",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 0
+[08:48:50.532] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 55,
+      "method": "GET",
+      "url": "/api/elections/aiml7"
+    }
+    [35mres[39m: {
+      "statusCode": 401
+    }
+    [35mresponseTime[39m: 1
+[08:48:50.602] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 56,
+      "method": "GET",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 401
+    }
+    [35mresponseTime[39m: 1
+[08:48:51.717] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 57,
+      "method": "GET",
+      "url": "/api/elections/aiml7"
+    }
+    [35mres[39m: {
+      "statusCode": 401
+    }
+    [35mresponseTime[39m: 1
+[08:48:51.759] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 58,
+      "method": "GET",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 401
+    }
+    [35mresponseTime[39m: 1
+[08:49:04.644] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 59,
+      "method": "OPTIONS",
+      "url": "/api/company/login"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 0
+[08:49:05.978] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 60,
+      "method": "POST",
+      "url": "/api/company/login"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 823
+[08:49:06.136] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 61,
+      "method": "OPTIONS",
+      "url": "/api/elections"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 0
+[08:49:06.304] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 62,
+      "method": "GET",
+      "url": "/api/elections"
+    }
+    [35mres[39m: {
+      "statusCode": 304
+    }
+    [35mresponseTime[39m: 10
+[08:49:08.035] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 63,
+      "method": "OPTIONS",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 0
+[08:49:08.104] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 64,
+      "method": "OPTIONS",
+      "url": "/api/voters"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:49:08.105] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 65,
+      "method": "OPTIONS",
+      "url": "/api/elections/aiml7"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:49:08.109] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 66,
+      "method": "OPTIONS",
+      "url": "/api/elections/aiml7/hourly-trend"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:49:08.251] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 67,
+      "method": "GET",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 304
+    }
+    [35mresponseTime[39m: 7
+[08:49:08.351] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 68,
+      "method": "GET",
+      "url": "/api/elections/aiml7/hourly-trend"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 24
+[08:49:08.485] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 69,
+      "method": "GET",
+      "url": "/api/elections/aiml7"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 154
+[08:49:08.527] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 70,
+      "method": "GET",
+      "url": "/api/voters"
+    }
+    [35mres[39m: {
+      "statusCode": 304
+    }
+    [35mresponseTime[39m: 192
+[08:49:19.920] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 71,
+      "method": "OPTIONS",
+      "url": "/api/voters/credential-info"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 0
+[08:49:20.144] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 72,
+      "method": "POST",
+      "url": "/api/voters/credential-info"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 5
+[08:49:20.965] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 73,
+      "method": "POST",
+      "url": "/api/voters/credential-info"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 13
+[08:49:24.819] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 74,
+      "method": "OPTIONS",
+      "url": "/api/voters/login/initiate"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 0
+[08:49:25.530] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 75,
+      "method": "POST",
+      "url": "/api/voters/login/initiate"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 552
+[08:49:29.851] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 76,
+      "method": "POST",
+      "url": "/api/voters/login/initiate"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 567
+[08:49:33.036] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 77,
+      "method": "OPTIONS",
+      "url": "/api/voters/login/initiate"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 0
+[08:49:35.887] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 78,
+      "method": "POST",
+      "url": "/api/voters/login/initiate"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 2697
+[08:49:57.359] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 79,
+      "method": "OPTIONS",
+      "url": "/api/voters/login/verify"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 0
+[08:49:58.138] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 80,
+      "method": "POST",
+      "url": "/api/voters/login/verify"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 565
+[08:49:58.331] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 81,
+      "method": "OPTIONS",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:49:58.342] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 82,
+      "method": "OPTIONS",
+      "url": "/api/elections/aiml7"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:49:58.795] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 83,
+      "method": "GET",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 304
+    }
+    [35mresponseTime[39m: 18
+[08:49:58.863] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 84,
+      "method": "GET",
+      "url": "/api/elections/aiml7"
+    }
+    [35mres[39m: {
+      "statusCode": 304
+    }
+    [35mresponseTime[39m: 11
+[08:50:03.384] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 85,
+      "method": "OPTIONS",
+      "url": "/api/vote"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:50:03.579] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 86,
+      "method": "POST",
+      "url": "/api/vote"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 35
+[08:50:09.029] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 87,
+      "method": "OPTIONS",
+      "url": "/api/elections/aiml7/hourly-trend"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:50:09.226] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 88,
+      "method": "GET",
+      "url": "/api/elections/aiml7/hourly-trend"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 5
+[08:50:19.631] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 89,
+      "method": "OPTIONS",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:50:19.836] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 90,
+      "method": "OPTIONS",
+      "url": "/api/voters"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:50:19.839] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 91,
+      "method": "OPTIONS",
+      "url": "/api/elections/aiml7"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:50:19.840] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 92,
+      "method": "OPTIONS",
+      "url": "/api/elections/aiml7/hourly-trend"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 0
+[08:50:20.442] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 93,
+      "method": "GET",
+      "url": "/api/elections/aiml7"
+    }
+    [35mres[39m: {
+      "statusCode": 304
+    }
+    [35mresponseTime[39m: 5
+[08:50:20.686] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 94,
+      "method": "GET",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 21
+[08:50:20.849] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 96,
+      "method": "GET",
+      "url": "/api/elections/aiml7/hourly-trend"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 175
+[08:50:20.867] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 95,
+      "method": "GET",
+      "url": "/api/voters"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 197
+[08:50:29.280] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 97,
+      "method": "OPTIONS",
+      "url": "/api/elections/aiml7/hourly-trend"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:50:29.452] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 98,
+      "method": "GET",
+      "url": "/api/elections/aiml7/hourly-trend"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 9
+[08:50:30.291] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 99,
+      "method": "OPTIONS",
+      "url": "/api/elections/aiml7/hourly-trend"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 0
+[08:50:30.449] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 100,
+      "method": "GET",
+      "url": "/api/elections/aiml7/hourly-trend"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 6
+[08:50:30.917] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 101,
+      "method": "OPTIONS",
+      "url": "/api/elections/aiml7/hourly-trend"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:50:31.083] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 102,
+      "method": "GET",
+      "url": "/api/elections/aiml7/hourly-trend"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 6
+[08:50:31.940] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 103,
+      "method": "OPTIONS",
+      "url": "/api/elections/aiml7/hourly-trend"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:50:32.111] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 104,
+      "method": "GET",
+      "url": "/api/elections/aiml7/hourly-trend"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 5
+[08:50:38.463] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 105,
+      "method": "OPTIONS",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:50:38.471] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 106,
+      "method": "OPTIONS",
+      "url": "/api/voters"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 2
+[08:50:39.142] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 107,
+      "method": "GET",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 304
+    }
+    [35mresponseTime[39m: 18
+[08:50:39.342] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 108,
+      "method": "GET",
+      "url": "/api/voters"
+    }
+    [35mres[39m: {
+      "statusCode": 304
+    }
+    [35mresponseTime[39m: 215
+[08:50:57.439] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 109,
+      "method": "OPTIONS",
+      "url": "/api/elections/aiml7/end"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:50:57.778] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 110,
+      "method": "POST",
+      "url": "/api/elections/aiml7/end"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 56
+[08:50:57.921] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 111,
+      "method": "OPTIONS",
+      "url": "/api/elections/aiml7"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 0
+[08:50:57.984] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 112,
+      "method": "OPTIONS",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 0
+[08:50:57.986] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 113,
+      "method": "OPTIONS",
+      "url": "/api/voters"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 0
+[08:50:58.134] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 114,
+      "method": "GET",
+      "url": "/api/elections/aiml7"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 5
+[08:50:58.215] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 115,
+      "method": "GET",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 304
+    }
+    [35mresponseTime[39m: 7
+[08:50:58.313] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 116,
+      "method": "GET",
+      "url": "/api/voters"
+    }
+    [35mres[39m: {
+      "statusCode": 304
+    }
+    [35mresponseTime[39m: 104
+[08:51:00.080] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 117,
+      "method": "OPTIONS",
+      "url": "/api/blockchain/elections/aiml7/anchors"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:51:00.165] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 118,
+      "method": "GET",
+      "url": "/api/voters"
+    }
+    [35mres[39m: {
+      "statusCode": 304
+    }
+    [35mresponseTime[39m: 16
+[08:51:00.174] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 119,
+      "method": "GET",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 304
+    }
+    [35mresponseTime[39m: 15
+[08:51:00.321] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 121,
+      "method": "GET",
+      "url": "/api/blockchain/elections/aiml7/anchors"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 28
+[08:51:00.396] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 120,
+      "method": "GET",
+      "url": "/api/elections/aiml7"
+    }
+    [35mres[39m: {
+      "statusCode": 304
+    }
+    [35mresponseTime[39m: 234
+[08:51:05.329] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 122,
+      "method": "OPTIONS",
+      "url": "/api/voters"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:51:05.361] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 123,
+      "method": "OPTIONS",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 0
+[08:51:05.507] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 124,
+      "method": "GET",
+      "url": "/api/voters"
+    }
+    [35mres[39m: {
+      "statusCode": 304
+    }
+    [35mresponseTime[39m: 21
+[08:51:05.518] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 125,
+      "method": "GET",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 304
+    }
+    [35mresponseTime[39m: 10
+[08:51:10.678] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 126,
+      "method": "OPTIONS",
+      "url": "/api/voters"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:51:10.679] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 127,
+      "method": "OPTIONS",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:51:10.840] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 128,
+      "method": "GET",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 304
+    }
+    [35mresponseTime[39m: 5
+[08:51:10.906] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 129,
+      "method": "GET",
+      "url": "/api/voters"
+    }
+    [35mres[39m: {
+      "statusCode": 304
+    }
+    [35mresponseTime[39m: 7
+[08:51:16.032] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 130,
+      "method": "OPTIONS",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 0
+[08:51:16.089] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 131,
+      "method": "OPTIONS",
+      "url": "/api/voters"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:51:16.190] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 132,
+      "method": "GET",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 304
+    }
+    [35mresponseTime[39m: 10
+[08:51:16.242] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 133,
+      "method": "GET",
+      "url": "/api/voters"
+    }
+    [35mres[39m: {
+      "statusCode": 304
+    }
+    [35mresponseTime[39m: 10
+[08:51:21.395] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 134,
+      "method": "OPTIONS",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:51:21.422] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 135,
+      "method": "OPTIONS",
+      "url": "/api/voters"
+    }
+    [35mres[39m: {
+      "statusCode": 204
+    }
+    [35mresponseTime[39m: 1
+[08:51:21.547] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 136,
+      "method": "GET",
+      "url": "/api/candidates"
+    }
+    [35mres[39m: {
+      "statusCode": 304
+    }
+    [35mresponseTime[39m: 5
+[08:51:21.568] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 137,
+      "method": "GET",
+      "url": "/api/voters"
+    }
+    [35mres[39m: {
+      "statusCode": 304
+    }
+    [35mresponseTime[39m: 4
+[08:51:44.019] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 138,
+      "method": "GET",
+      "url": "/api/healthz"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1
