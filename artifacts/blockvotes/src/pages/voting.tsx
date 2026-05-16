@@ -177,6 +177,14 @@ export default function Voting() {
         </div>
 
         <div className="grid sm:grid-cols-2 gap-6 mb-12">
+          {candidates.length === 0 && (
+            <Card className="sm:col-span-2 p-8 text-center">
+              <h2 className="text-xl font-bold font-display">No Candidates Available</h2>
+              <p className="mt-2 text-muted-foreground">
+                Candidates have not been added to this election yet, or they are still loading. Please contact your election administrator.
+              </p>
+            </Card>
+          )}
           {candidates.map(c => {
             const isSelected = selectedCandidateId === c.id
             return (

@@ -17,19 +17,27 @@ function getSingleParam(value: string | string[] | undefined): string {
   return Array.isArray(value) ? (value[0] ?? "") : (value ?? "");
 }
 
-router.get("/", requireAdminAuth, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const { election_id } = req.query;
     if (!election_id) {
       res.json({ status: "error", message: "election_id is required", data: [] });
       return;
     }
-    const companyId = requireAdminCompanyId(req);
-    const election = await ensureElectionBelongsToAdmin(election_id as string, companyId);
-    if (!election) {
+
+    const elections = await db
+      .select({
+        id: electionsTable.id,
+      })
+      .from(electionsTable)
+      .where(eq(electionsTable.id, election_id as string))
+      .limit(1);
+
+    if (elections.length === 0) {
       res.status(404).json({ status: "error", message: "Election not found", data: [] });
       return;
     }
+
     const candidates = await db.select().from(candidatesTable).where(eq(candidatesTable.electionId, election_id as string));
     const mapped = candidates.map(c => ({
       id: c.id,

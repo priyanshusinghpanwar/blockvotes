@@ -272,21 +272,19 @@ router.post("/", requireAdminAuth, async (req, res) => {
   }
 });
 
-router.get("/:electionId", requireAdminAuth, async (req, res) => {
+router.get("/:electionId", async (req, res) => {
   try {
     const electionId = getSingleParam(req.params.electionId);
-    const companyId = requireAdminCompanyId(req);
-    const election = await ensureElectionBelongsToAdmin(electionId, companyId);
-    if (!election) {
-      res.json({ status: "error", message: "Election not found", data: null });
-      return;
-    }
     const results = await db
       .select()
       .from(electionsTable)
       .where(eq(electionsTable.id, electionId))
       .limit(1);
     const e = results[0];
+    if (!e) {
+      res.json({ status: "error", message: "Election not found", data: null });
+      return;
+    }
     res.json({
       status: "success",
       message: "Election fetched",
