@@ -259,7 +259,6 @@ export default function ElectionDetail() {
     : null
   const scheduledStartIst = (election as any)?.scheduled_start_ist as string | null | undefined
   const scheduledEndIst = (election as any)?.scheduled_end_ist as string | null | undefined
-
   // Mutations
   const endMut = useEndElection()
   const addCandidateMut = useAddCandidate()
@@ -561,7 +560,9 @@ export default function ElectionDetail() {
                 <AlertCircle className="text-blue-600 shrink-0 mt-1" />
                 <div>
                   <h4 className="text-blue-900 font-bold text-lg">Setup Phase</h4>
-                  <p className="text-blue-800 mt-1">Add all candidates and voters before scheduled start time. Candidate list will lock automatically when election becomes active.</p>
+                  <p className="text-blue-800 mt-1">
+                    Add all candidates and voters before scheduled start time. Candidate list will lock automatically when election becomes active.
+                  </p>
                 </div>
               </div>
             )}

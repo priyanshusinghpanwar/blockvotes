@@ -28,7 +28,15 @@ export async function runElectionAutomationNow(): Promise<void> {
     let started = 0;
     for (const election of pendingToStart) {
       const result = await activateElectionById(election.id);
-      if (result.ok) started++;
+      if (result.ok) {
+        started++;
+        continue;
+      }
+
+      logger.warn(
+        { electionId: election.id, reason: result.message },
+        "Election automation could not activate scheduled election",
+      );
     }
 
     const activeToEnd = await db
@@ -44,7 +52,15 @@ export async function runElectionAutomationNow(): Promise<void> {
     let ended = 0;
     for (const election of activeToEnd) {
       const result = await finalizeElectionById(election.id);
-      if (result.ok) ended++;
+      if (result.ok) {
+        ended++;
+        continue;
+      }
+
+      logger.warn(
+        { electionId: election.id, reason: result.message },
+        "Election automation could not finalize scheduled election",
+      );
     }
 
     if (started > 0 || ended > 0) {

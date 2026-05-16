@@ -1,6 +1,7 @@
 import "./lib/load-env";
 import app from "./app";
 import { logger } from "./lib/logger";
+import { describeSmsConfiguration } from "./email-service";
 import { startElectionAutomation } from "./services/election-automation";
 
 const rawPort = process.env["PORT"] ?? "3000";
@@ -23,6 +24,12 @@ app.listen(port, (err) => {
     process.exit(1);
   }
 
+  const smsConfig = describeSmsConfiguration();
   logger.info({ port }, "Server listening");
+  if (smsConfig.configured) {
+    logger.info({ provider: smsConfig.provider }, smsConfig.message);
+  } else {
+    logger.warn({ provider: smsConfig.provider }, smsConfig.message);
+  }
   startElectionAutomation();
 });

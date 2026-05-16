@@ -3,7 +3,7 @@ import { useLocation } from "wouter"
 import { useAuth } from "@/hooks/use-auth"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Fingerprint, Hash, Mail, ShieldCheck, KeyRound } from "lucide-react"
+import { Fingerprint, Hash, Mail, ShieldCheck, KeyRound, Eye, EyeOff } from "lucide-react"
 import { PageTransition } from "@/components/layout"
 import { useToast } from "@/hooks/use-toast"
 import { apiFetch } from "@/lib/api"
@@ -63,16 +63,26 @@ function formatRemainingTime(totalSeconds: number): string {
   return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`
 }
 
+function getOtpChannelText(emailSent: boolean, smsSent: boolean): string {
+  if (emailSent && smsSent) return "registered email and mobile number"
+  if (emailSent) return "registered email"
+  if (smsSent) return "registered mobile number"
+  return "registered contact channel"
+}
+
 export default function VoterLogin() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [electionId, setElectionId] = useState("")
   const [otp, setOtp] = useState("")
   const [passwordSentNote, setPasswordSentNote] = useState<string | null>(null)
+  const [showPassword, setShowPassword] = useState(false)
   const [step, setStep] = useState<"credentials" | "otp">("credentials")
   const [challengeId, setChallengeId] = useState("")
   const [maskedEmail, setMaskedEmail] = useState("")
   const [maskedMobile, setMaskedMobile] = useState("")
+  const [emailOtpSent, setEmailOtpSent] = useState(false)
+  const [smsOtpSent, setSmsOtpSent] = useState(false)
   const [otpExpiresAtIso, setOtpExpiresAtIso] = useState<string | null>(null)
   const [secondsLeft, setSecondsLeft] = useState(0)
   const [resendAvailableAtIso, setResendAvailableAtIso] = useState<string | null>(null)
@@ -133,6 +143,8 @@ export default function VoterLogin() {
       setOtpExpiresAtIso(result.data.expires_at)
       setMaskedEmail(result.data.masked_email || trimmedEmail)
       setMaskedMobile(result.data.masked_mobile || "your mobile")
+      setEmailOtpSent(Boolean(result.data.email_sent))
+      setSmsOtpSent(Boolean(result.data.sms_sent))
       setOtp("")
       setStep("otp")
       setResendAvailableAtIso(result.data.resend_available_at || null)
@@ -168,7 +180,7 @@ export default function VoterLogin() {
       toast({
         variant: "destructive",
         title: "OTP required",
-        description: "Please enter the OTP sent to your email and mobile.",
+        description: `Please enter the OTP sent to your ${getOtpChannelText(emailOtpSent, smsOtpSent)}.`,
       })
       return
     }
@@ -322,7 +334,7 @@ export default function VoterLogin() {
           <p className="text-muted-foreground mt-2">
             {step === "credentials"
               ? "Secure login using election ID, registered email, and password."
-              : "Enter the OTP sent to your registered email and mobile number."}
+              : `Enter the OTP sent to your ${getOtpChannelText(emailOtpSent, smsOtpSent)}.`}
           </p>
           <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground">
             <span className={`rounded-lg px-3 py-1 border ${step === "credentials" ? "border-accent/30 bg-accent/10 text-primary" : "border-border bg-white"}`}>
@@ -377,7 +389,7 @@ export default function VoterLogin() {
                   <div className="relative">
                     <KeyRound size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
                     <input
-                      type="text"
+                      type={showPassword ? "text" : "password"}
                       inputMode="text"
                       autoCapitalize="characters"
                       maxLength={12}
@@ -385,8 +397,16 @@ export default function VoterLogin() {
                       value={password}
                       onChange={e => setPassword(e.target.value.replace(/[^a-zA-Z0-9]/g, "").toUpperCase())}
                       required
-                      className="flex w-full min-w-0 rounded-lg border border-input bg-white pl-11 pr-4 py-3 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary transition-all tracking-widest font-mono text-center sm:text-lg"
+                      className="flex w-full min-w-0 rounded-lg border border-input bg-white pl-11 pr-12 py-3 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary transition-all tracking-widest font-mono text-center sm:text-lg"
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(current => !current)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                    >
+                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
                   </div>
                   <p className="text-xs text-muted-foreground pl-1">
                     {passwordSentNote || "Password is sent to your mobile number on the date when credentials email is sent."}
@@ -406,8 +426,8 @@ export default function VoterLogin() {
               <>
                 <div className="rounded-lg border border-border bg-muted/40 p-4 text-sm">
                   <p className="text-foreground font-medium">OTP sent to</p>
-                  <p className="text-muted-foreground mt-1">{maskedEmail || email}</p>
-                  <p className="text-muted-foreground">{maskedMobile || "registered mobile"}</p>
+                  {emailOtpSent ? <p className="text-muted-foreground mt-1">{maskedEmail || email}</p> : null}
+                  {smsOtpSent ? <p className="text-muted-foreground mt-1">{maskedMobile || "registered mobile"}</p> : null}
                   <p className={`mt-2 font-semibold ${otpExpired ? "text-red-600" : "text-emerald-600"}`}>
                     {otpExpired ? "OTP expired" : `OTP valid for ${otpExpiresText} (max 10 minutes)`}
                   </p>
@@ -446,6 +466,8 @@ export default function VoterLogin() {
                       setStep("credentials")
                       setOtp("")
                       setChallengeId("")
+                      setEmailOtpSent(false)
+                      setSmsOtpSent(false)
                       setOtpExpiresAtIso(null)
                       setResendAvailableAtIso(null)
                     }}

@@ -17,7 +17,7 @@ const SENDER = process.env.BREVO_SENDER || "priyanshupanwar369@gmail.com";
 const PASSWORD_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 const DEFAULT_PASSWORD_LENGTH = 8;
 const OTP_VALIDITY_MINUTES = 10;
-const DEFAULT_SMS_PROVIDER = "android_gateway";
+const DEFAULT_SMS_PROVIDER = "none";
 
 function escapeHtml(value: string): string {
   return value
@@ -71,11 +71,112 @@ function normalizeMobileForSms(mobile: string): string {
   return trimmed;
 }
 
+function isAndroidGatewayConfigured(): boolean {
+  return Boolean(process.env.SMS_GATEWAY_URL?.trim());
+}
+
+function isTwilioConfigured(): boolean {
+  return Boolean(
+    process.env.TWILIO_ACCOUNT_SID?.trim()
+    && process.env.TWILIO_AUTH_TOKEN?.trim()
+    && process.env.TWILIO_FROM_NUMBER?.trim(),
+  );
+}
+
+function isMySmsGateConfigured(): boolean {
+  return Boolean(process.env.MYSMSGATE_API_KEY?.trim());
+}
+
+function isSmsMobileApiConfigured(): boolean {
+  return Boolean(process.env.SMSMOBILEAPI_APIKEY?.trim());
+}
+
 function getSmsProvider(): string {
   const configured = process.env.SMS_PROVIDER?.trim().toLowerCase();
   if (configured) return configured;
-  if (process.env.SMS_GATEWAY_URL?.trim()) return "android_gateway";
+  if (isAndroidGatewayConfigured()) return "android_gateway";
+  if (isMySmsGateConfigured()) return "mysmsgate";
+  if (isTwilioConfigured()) return "twilio";
+  if (isSmsMobileApiConfigured()) return "smsmobileapi";
   return DEFAULT_SMS_PROVIDER;
+}
+
+export function describeSmsConfiguration(): {
+  provider: string;
+  configured: boolean;
+  message: string;
+} {
+  const provider = getSmsProvider();
+
+  if (provider === "none" || provider === "disabled") {
+    return {
+      provider,
+      configured: false,
+      message: "SMS OTP delivery is disabled because no SMS provider is configured.",
+    };
+  }
+
+  if (provider === "android_gateway") {
+    return isAndroidGatewayConfigured()
+      ? {
+          provider,
+          configured: true,
+          message: "Android SMS gateway is configured for OTP delivery.",
+        }
+      : {
+          provider,
+          configured: false,
+          message: "SMS_PROVIDER is set to android_gateway but SMS_GATEWAY_URL is missing.",
+        };
+  }
+
+  if (provider === "twilio") {
+    return isTwilioConfigured()
+      ? {
+          provider,
+          configured: true,
+          message: "Twilio is configured for OTP delivery.",
+        }
+      : {
+          provider,
+          configured: false,
+          message: "SMS_PROVIDER is set to twilio but Twilio credentials are incomplete.",
+        };
+  }
+
+  if (provider === "mysmsgate") {
+    return isMySmsGateConfigured()
+      ? {
+          provider,
+          configured: true,
+          message: "MySMSGate is configured for OTP delivery.",
+        }
+      : {
+          provider,
+          configured: false,
+          message: "SMS_PROVIDER is set to mysmsgate but MYSMSGATE_API_KEY is missing.",
+        };
+  }
+
+  if (provider === "smsmobileapi") {
+    return isSmsMobileApiConfigured()
+      ? {
+          provider,
+          configured: true,
+          message: "SmsMobileApi is configured for OTP delivery.",
+        }
+      : {
+          provider,
+          configured: false,
+          message: "SMS_PROVIDER is set to smsmobileapi but SMSMOBILEAPI_APIKEY is missing.",
+        };
+  }
+
+  return {
+    provider,
+    configured: false,
+    message: `Unsupported SMS_PROVIDER "${provider}". Use "android_gateway", "mysmsgate", "smsmobileapi", "twilio", or "none".`,
+  };
 }
 
 async function sendVoterLoginOtpSmsViaAndroidGateway(opts: {
@@ -205,6 +306,78 @@ async function sendVoterLoginOtpSmsViaTwilio(opts: {
   }
 }
 
+async function sendVoterLoginOtpSmsViaMySmsGate(opts: {
+  mobile: string;
+  voterName: string;
+  electionName: string;
+  otp: string;
+}): Promise<{ sent: boolean; error?: string }> {
+  const apiKey = process.env.MYSMSGATE_API_KEY?.trim();
+  if (!apiKey) {
+    return { sent: false, error: "MYSMSGATE_API_KEY is not configured" };
+  }
+
+  const endpoint = process.env.MYSMSGATE_ENDPOINT?.trim() || "https://mysmsgate.net/api/v1/send";
+  const to = normalizeMobileForSms(opts.mobile);
+  const message = `BlockVotes OTP for ${opts.electionName}: ${opts.otp}. Valid for ${OTP_VALIDITY_MINUTES} minutes.`;
+  const payload: Record<string, string | number> = {
+    to,
+    message,
+  };
+
+  const deviceId = process.env.MYSMSGATE_DEVICE_ID?.trim();
+  if (deviceId) {
+    payload.device_id = deviceId;
+  }
+
+  const slot = process.env.MYSMSGATE_SLOT?.trim();
+  if (slot) {
+    const parsedSlot = Number.parseInt(slot, 10);
+    if (!Number.isNaN(parsedSlot)) {
+      payload.slot = parsedSlot;
+    }
+  }
+
+  try {
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const raw = await response.text();
+    if (!response.ok) {
+      return { sent: false, error: `MySMSGate error: ${raw || response.statusText}` };
+    }
+
+    if (!raw) {
+      return { sent: true };
+    }
+
+    try {
+      const parsed = JSON.parse(raw) as {
+        success?: boolean;
+        status?: string;
+        message?: string;
+        error?: string;
+      };
+
+      if (parsed.success === false) {
+        return { sent: false, error: parsed.error || parsed.message || "MySMSGate did not accept the SMS request" };
+      }
+
+      return { sent: true };
+    } catch {
+      return { sent: true };
+    }
+  } catch (err: any) {
+    return { sent: false, error: err?.message || "Failed to send SMS via MySMSGate" };
+  }
+}
+
 async function sendVoterLoginOtpSmsViaSmsMobileApi(opts: {
   mobile: string;
   voterName: string;
@@ -321,7 +494,11 @@ async function sendVoterLoginOtpSms(opts: {
   electionName: string;
   otp: string;
 }): Promise<{ sent: boolean; error?: string }> {
-  const provider = getSmsProvider();
+  const { provider, configured, message } = describeSmsConfiguration();
+
+  if (!configured) {
+    return { sent: false, error: message };
+  }
 
   if (provider === "android_gateway") {
     return sendVoterLoginOtpSmsViaAndroidGateway(opts);
@@ -331,13 +508,17 @@ async function sendVoterLoginOtpSms(opts: {
     return sendVoterLoginOtpSmsViaTwilio(opts);
   }
 
+  if (provider === "mysmsgate") {
+    return sendVoterLoginOtpSmsViaMySmsGate(opts);
+  }
+
   if (provider === "smsmobileapi") {
     return sendVoterLoginOtpSmsViaSmsMobileApi(opts);
   }
 
   return {
     sent: false,
-    error: `Unsupported SMS_PROVIDER "${provider}". Use "android_gateway", "smsmobileapi", or "twilio".`,
+    error: `Unsupported SMS_PROVIDER "${provider}". Use "android_gateway", "mysmsgate", "smsmobileapi", "twilio", or "none".`,
   };
 }
 

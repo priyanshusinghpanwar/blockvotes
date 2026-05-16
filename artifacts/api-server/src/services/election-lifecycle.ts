@@ -1,5 +1,5 @@
 import { db } from "@workspace/db";
-import { candidatesTable, electionsTable, votersTable } from "@workspace/db";
+import { candidatesTable, electionsTable } from "@workspace/db";
 import { eq } from "drizzle-orm";
 
 export async function activateElectionById(
@@ -25,19 +25,6 @@ export async function activateElectionById(
 
   if (candidates.length < 2) {
     return { ok: false, message: "At least 2 candidates are required to start election" };
-  }
-
-  const voters = await db
-    .select()
-    .from(votersTable)
-    .where(eq(votersTable.electionId, electionId));
-
-  const unverifiedCount = voters.filter((voter) => !voter.profileCompleted).length;
-  if (unverifiedCount > 0) {
-    return {
-      ok: false,
-      message: `All voter profiles must be verified before election start. Pending verification: ${unverifiedCount}`,
-    };
   }
 
   await db

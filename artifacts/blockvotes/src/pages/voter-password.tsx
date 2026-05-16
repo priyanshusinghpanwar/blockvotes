@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
 import { apiFetch } from "@/lib/api"
-import { ArrowLeft, KeyRound } from "lucide-react"
+import { ArrowLeft, KeyRound, Eye, EyeOff } from "lucide-react"
 
 type ChangePasswordResponse = {
   status: string
@@ -22,6 +22,9 @@ export default function VoterPassword() {
   const [currentPassword, setCurrentPassword] = useState("")
   const [newPassword, setNewPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false)
+  const [showNewPassword, setShowNewPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
 
   const { data: electionRes } = useGetElection(voter?.election_id || "", {
@@ -129,41 +132,71 @@ export default function VoterPassword() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-semibold mb-1.5">Current Password</label>
-              <input
-                type="password"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value.replace(/[^a-zA-Z0-9]/g, "").toUpperCase())}
-                disabled={!isPending}
-                className="w-full rounded-lg border border-input bg-white px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary disabled:bg-muted disabled:text-muted-foreground"
-                placeholder="Enter current password"
-                required
-              />
+              <div className="relative">
+                <input
+                  type={showCurrentPassword ? "text" : "password"}
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value.replace(/[^a-zA-Z0-9]/g, "").toUpperCase())}
+                  disabled={!isPending}
+                  className="w-full rounded-lg border border-input bg-white px-4 pr-12 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary disabled:bg-muted disabled:text-muted-foreground"
+                  placeholder="Enter current password"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowCurrentPassword(current => !current)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label={showCurrentPassword ? "Hide current password" : "Show current password"}
+                >
+                  {showCurrentPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
 
             <div>
               <label className="block text-sm font-semibold mb-1.5">New Password</label>
-              <input
-                type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value.replace(/[^a-zA-Z0-9]/g, "").toUpperCase())}
-                disabled={!isPending}
-                className="w-full rounded-lg border border-input bg-white px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary disabled:bg-muted disabled:text-muted-foreground"
-                placeholder="Enter new password"
-                required
-              />
+              <div className="relative">
+                <input
+                  type={showNewPassword ? "text" : "password"}
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value.replace(/[^a-zA-Z0-9]/g, "").toUpperCase())}
+                  disabled={!isPending}
+                  className="w-full rounded-lg border border-input bg-white px-4 pr-12 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary disabled:bg-muted disabled:text-muted-foreground"
+                  placeholder="Enter new password"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowNewPassword(current => !current)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label={showNewPassword ? "Hide new password" : "Show new password"}
+                >
+                  {showNewPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
 
             <div>
               <label className="block text-sm font-semibold mb-1.5">Confirm New Password</label>
-              <input
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value.replace(/[^a-zA-Z0-9]/g, "").toUpperCase())}
-                disabled={!isPending}
-                className="w-full rounded-lg border border-input bg-white px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary disabled:bg-muted disabled:text-muted-foreground"
-                placeholder="Confirm new password"
-                required
-              />
+              <div className="relative">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value.replace(/[^a-zA-Z0-9]/g, "").toUpperCase())}
+                  disabled={!isPending}
+                  className="w-full rounded-lg border border-input bg-white px-4 pr-12 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary disabled:bg-muted disabled:text-muted-foreground"
+                  placeholder="Confirm new password"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(current => !current)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
+                >
+                  {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
 
             <Button type="submit" className="w-full" disabled={!isPending} isLoading={isSaving}>

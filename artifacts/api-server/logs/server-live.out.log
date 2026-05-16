@@ -1,0 +1,19 @@
+[08:18:20.140] [32mINFO[39m (13888): [36mServer listening[39m
+    [35mport[39m: 3000
+[08:18:20.141] [32mINFO[39m (13888): [36mMySMSGate is configured for OTP delivery.[39m
+    [35mprovider[39m: "mysmsgate"
+[08:18:20.148] [32mINFO[39m (13888): [36mElection automation started[39m
+    [35mintervalMs[39m: 5000
+[08:18:20.594] [32mINFO[39m (13888): [36mElection automation cycle executed[39m
+    [35mstarted[39m: 4
+    [35mended[39m: 4
+[08:18:40.844] [32mINFO[39m (13888): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 1,
+      "method": "GET",
+      "url": "/api/healthz"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 18
