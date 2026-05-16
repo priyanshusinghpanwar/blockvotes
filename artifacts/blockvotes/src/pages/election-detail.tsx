@@ -72,7 +72,7 @@ type HourlyTrendApiResponse = {
   status: string
   message: string
   data?: {
-    timeframe?: "10m" | "30m" | "1h" | "3h"
+    timeframe?: "5m" | "10m" | "15m" | "30m"
     bucket_minutes?: number
     timezone?: string
     refresh_interval?: string
@@ -88,10 +88,10 @@ type HourlyTrendApiResponse = {
 }
 
 const timeframeOptions = [
+  { value: "5m", label: "5 min" },
   { value: "10m", label: "10 min" },
+  { value: "15m", label: "15 min" },
   { value: "30m", label: "30 min" },
-  { value: "1h", label: "1 hour" },
-  { value: "3h", label: "3 hours" },
 ] as const
 
 type ElectionDetailTab = "overview" | "analytics" | "candidates" | "voters"
@@ -178,7 +178,7 @@ export default function ElectionDetail() {
   const [isImportingCsv, setIsImportingCsv] = useState(false)
   const [csvPreview, setCsvPreview] = useState<ImportPreviewApiResponse["data"] | null>(null)
   const [csvPreviewFileKey, setCsvPreviewFileKey] = useState("")
-  const [selectedTrendTimeframe, setSelectedTrendTimeframe] = useState<"10m" | "30m" | "1h" | "3h">("1h")
+  const [selectedTrendTimeframe, setSelectedTrendTimeframe] = useState<"5m" | "10m" | "15m" | "30m">("30m")
 
   // Queries
   const { data: electionRes, isLoading: loadingE } = useGetElection(id, { query: { queryKey: [`/api/elections/${id}`], enabled: !!id } })
@@ -256,7 +256,7 @@ export default function ElectionDetail() {
   )
   const trendPoints = hourlyTrendRes?.data?.points || []
   const trendBucketMinutes = hourlyTrendRes?.data?.bucket_minutes
-    ?? (selectedTrendTimeframe === "10m" ? 10 : selectedTrendTimeframe === "30m" ? 30 : selectedTrendTimeframe === "3h" ? 180 : 60)
+    ?? (selectedTrendTimeframe === "5m" ? 5 : selectedTrendTimeframe === "10m" ? 10 : selectedTrendTimeframe === "15m" ? 15 : 30)
   const trendChartData = trendPoints.map((point, index) => ({
     timeLabel: point.elapsed_label,
     elapsedLabel: formatElapsedMinutes((index + 1) * trendBucketMinutes),

@@ -147,11 +147,12 @@ function toIstLabel(value: Date): string {
   return `${day} ${month} ${hour}:${minute} IST`;
 }
 
-function resolveTrendTimeframe(value: unknown): { key: "10m" | "30m" | "1h" | "3h"; bucketMinutes: number } {
+function resolveTrendTimeframe(value: unknown): { key: "5m" | "10m" | "15m" | "30m"; bucketMinutes: number } {
+  if (value === "5m") return { key: "5m", bucketMinutes: 5 };
   if (value === "10m") return { key: "10m", bucketMinutes: 10 };
+  if (value === "15m") return { key: "15m", bucketMinutes: 15 };
   if (value === "30m") return { key: "30m", bucketMinutes: 30 };
-  if (value === "3h") return { key: "3h", bucketMinutes: 180 };
-  return { key: "1h", bucketMinutes: 60 };
+  return { key: "30m", bucketMinutes: 30 };
 }
 
 function toElapsedLabel(pointIndex: number, bucketMinutes: number): string {
