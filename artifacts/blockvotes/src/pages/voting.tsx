@@ -79,7 +79,10 @@ export default function Voting() {
     try {
       const response = await apiFetch("/api/vote", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...((voter as any)?.auth_token ? { "x-voter-session": (voter as any).auth_token } : {}),
+        },
         body: JSON.stringify({ candidate_id: selectedCandidateId }),
       })
       const result = await response.json()

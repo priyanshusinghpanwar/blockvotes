@@ -21,7 +21,12 @@ const loadCompany = (): AuthResponseData | null => {
 };
 
 const loadVoter = (): VoterAuthResponseData | null => {
-  return null;
+  try {
+    const data = localStorage.getItem('blockvotes_voter');
+    return data ? JSON.parse(data) : null;
+  } catch {
+    return null;
+  }
 };
 
 export const useAuth = create<AuthState>((set) => ({
@@ -38,7 +43,11 @@ export const useAuth = create<AuthState>((set) => ({
   },
   
   setVoter: (voter) => {
-    localStorage.removeItem('blockvotes_voter');
+    if (voter) {
+      localStorage.setItem('blockvotes_voter', JSON.stringify(voter));
+    } else {
+      localStorage.removeItem('blockvotes_voter');
+    }
     set({ voter });
   },
   

@@ -178,6 +178,7 @@ export type VoterAuthResponseData = {
   age?: number | null;
   gender?: string | null;
   has_voted?: boolean;
+  auth_token?: string;
 } | null;
 
 export interface VoterAuthResponse {

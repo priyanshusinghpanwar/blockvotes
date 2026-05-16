@@ -17,7 +17,7 @@ import {
   requireAdminCompanyId,
 } from "../lib/admin-auth";
 import { hashPassword, isLegacyPasswordHash, verifyPassword } from "../lib/password";
-import { attachVoterSessionCookie } from "../lib/voter-auth";
+import { attachVoterSessionCookie, createVoterSessionToken } from "../lib/voter-auth";
 
 const router: IRouter = Router();
 const requiredCsvHeaders = ["name", "voter_id", "aadhar_id", "mobile", "email_id", "age", "gender"] as const;
@@ -1997,6 +1997,10 @@ router.post("/login/verify", async (req, res) => {
       id: voter.id,
       electionId: voter.electionId,
     });
+    const authToken = createVoterSessionToken({
+      id: voter.id,
+      electionId: voter.electionId,
+    });
 
     res.json({
       status: "success",
@@ -2015,6 +2019,7 @@ router.post("/login/verify", async (req, res) => {
         signature_url: voter.signatureUrl,
         profile_completed: voter.profileCompleted,
         has_voted: voter.hasVoted,
+        auth_token: authToken,
       },
     });
   } catch (err) {

@@ -50,6 +50,17 @@ function buildSessionToken(payload: VoterSessionPayload): string {
   return `${encodedPayload}.${signature}`;
 }
 
+export function createVoterSessionToken(
+  voter: { id: string; electionId: string },
+  ttlMs = VOTER_SESSION_TTL_MS,
+): string {
+  return buildSessionToken({
+    voterId: voter.id,
+    electionId: voter.electionId,
+    exp: Date.now() + ttlMs,
+  });
+}
+
 function parseSessionToken(token: string | undefined): VoterSessionPayload | null {
   if (!token) return null;
 
@@ -84,11 +95,7 @@ export function attachVoterSessionCookie(
   res: Response,
   voter: { id: string; electionId: string },
 ): void {
-  const token = buildSessionToken({
-    voterId: voter.id,
-    electionId: voter.electionId,
-    exp: Date.now() + VOTER_SESSION_TTL_MS,
-  });
+  const token = createVoterSessionToken(voter);
 
   res.cookie(
     VOTER_SESSION_COOKIE,
@@ -106,9 +113,16 @@ export function requireVoterAuth(
   res: Response,
   next: NextFunction,
 ): void {
-  const token = typeof req.cookies?.[VOTER_SESSION_COOKIE] === "string"
+  const cookieToken = typeof req.cookies?.[VOTER_SESSION_COOKIE] === "string"
     ? req.cookies[VOTER_SESSION_COOKIE]
     : undefined;
+  const headerToken = typeof req.headers["x-voter-session"] === "string"
+    ? req.headers["x-voter-session"]
+    : undefined;
+  const bearerToken = typeof req.headers.authorization === "string" && req.headers.authorization.startsWith("Bearer ")
+    ? req.headers.authorization.slice("Bearer ".length).trim()
+    : undefined;
+  const token = cookieToken || headerToken || bearerToken;
   const session = parseSessionToken(token);
 
   if (!session) {
